@@ -13,7 +13,6 @@ public class Util {
 	public static final String NO_NOTES_FOUND_MESSAGE = "Opps...No notes Found!";
 	public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
 	public static final String IP_ADDRESS = "http://localhost:";
-	public static final String REGESTATION_VERIFICATION_LINK = "/user/verification";
 	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...User not found!";
 	public static final String NOTE_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...Note not found!";
 	public static final String LABEL_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...Label not found!";

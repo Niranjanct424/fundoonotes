@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bridgeLabz.fundooNotes.exception.InvalidCredentialsException;
 import com.bridgelabz.fundoonotes.constants.UserException;
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 import com.bridgelabz.fundoonotes.dto.RegisterDto;
@@ -38,6 +39,9 @@ public class UserServiceImplemenation implements UserService {
 
 	@Autowired
 	EmailService emilService;
+	
+	@Autowired
+	UserException userException;
 
 	@Override
 	public boolean register(RegisterDto userDto) {
@@ -54,20 +58,20 @@ public class UserServiceImplemenation implements UserService {
 		userRepository.save(newUser);
 		// user again fetched from database and mail sent for verification
 		User fetchedUserForVerification = userRepository.getUser(newUser.getEmailId());
-		String emailBodyContaintLink = Util.createLink(
-				Util.IP_ADDRESS + environment.getProperty("server.port") + Util.REGESTATION_VERIFICATION_LINK,
+		String emailBodyContaintLink = Util.createLink("http://localhost:8080/user/verification",
 				jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
+
 		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
 			return true;
-		throw new UserException("Opps...Error sending verification mail!", 500);
+		else
+			throw new UserException("Opps...Error sending verification mail!", 500);
 
 	}
 
 	@Override
 	public boolean isVerifiedUserToken(String token) {
 		long verifcatinIdfromDecodedJwt = jwtToken.decodeToken(token);
-		if(verifcatinIdfromDecodedJwt > 0)
-		{
+		if (verifcatinIdfromDecodedJwt > 0) {
 			userRepository.isVerifiedUserCheck(verifcatinIdfromDecodedJwt);
 			return true;
 		}
@@ -76,8 +80,19 @@ public class UserServiceImplemenation implements UserService {
 
 	@Override
 	public User login(LoginDto loginInformation) {
-
-		return null;
+		User fetchedUser = userRepository.getUser(loginInformation.getEmailId());
+		if (fetchedUser != null) {
+			if (bCryptPasswordEncoder.matches(loginInformation.getPassword(), fetchedUser.getPassword())) {
+				if (fetchedUser.isVerified()) {
+					return fetchedUser;
+				}
+				String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/user/verification",
+						jwtToken.createJwtToken(fetchedUser.getUserId()));
+				emilService.sendMail(fetchedUser.getEmailId(), "Verification", unVerifiedUsertosendmail);			
+			}
+			throw new UserException("You enterd invalid Credentials", 400);
+		}
+		throw new UserException("UserNotFound", 404);
 	}
 
 	@Override

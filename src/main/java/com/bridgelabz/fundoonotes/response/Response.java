@@ -1,32 +1,27 @@
 package com.bridgelabz.fundoonotes.response;
 
-import java.util.List;
-
 public class Response {
 
 	private String message;
 
 	private int statusCode;
 
-	private Object object;
 
-	List<String> details;
-
-	public Response(String message, int statusCode, Object object) {
+	public Response(String message, int statusCode) {
 		this.message = message;
 		this.statusCode = statusCode;
-		this.object = object;
+		
+	}
+	public Response(String message)
+	{
+		this.message = message;
+
 	}
 
 	/**
 	 * Constructor to fetch response if exist any.
 	 * 
 	 */
-	public Response(String message, int statusCode) {
-
-		this.message = message;
-		this.statusCode = statusCode;
-	}
 
 	public Response() {
 
@@ -48,26 +43,11 @@ public class Response {
 		this.statusCode = statusCode;
 	}
 
-	public Object getObj() {
-		return object;
-	}
 
-	public void setObj(Object obj) {
-		this.object = obj;
-	}
-
-	public List<String> getDetails() {
-		return details;
-	}
-
-	public void setDetails(List<String> details) {
-		this.details = details;
-	}
 
 	@Override
 	public String toString() {
-		return "Response [message=" + message + ", statusCode=" + statusCode + ", object=" + object + ", details="
-				+ details + "]";
+		return "Response [message=" + message + ", statusCode=" + statusCode + "]";
 	}
 
 }
