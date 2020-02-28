@@ -65,7 +65,12 @@ public class UserServiceImplemenation implements UserService {
 
 	@Override
 	public boolean isVerifiedUserToken(String token) {
-
+		long verifcatinIdfromDecodedJwt = jwtToken.decodeToken(token);
+		if(verifcatinIdfromDecodedJwt > 0)
+		{
+			userRepository.isVerifiedUserCheck(verifcatinIdfromDecodedJwt);
+			return true;
+		}
 		return false;
 	}
 

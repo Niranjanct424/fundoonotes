@@ -44,7 +44,7 @@ public class UserRepository implements UserRepositoryInterface {
 
 	@Override
 	@Transactional
-	public boolean isVerifiedUser(Long id) {
+	public boolean isVerifiedUserCheck(Long id) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("UPDATE User set is_verified=:verified" + " WHERE id=:id");
 		query.setParameter("verified", true);

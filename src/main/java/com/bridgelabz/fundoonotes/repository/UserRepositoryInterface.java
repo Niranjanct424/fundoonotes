@@ -13,7 +13,7 @@ public interface UserRepositoryInterface {
 	public User getUser(Long id);
 
 	
-	public boolean isVerifiedUser(Long id);
+	public boolean isVerifiedUserCheck(Long id);
 
 	
 	public boolean updatePassword(UpdatePassword updatePasswordinformation, long id);
