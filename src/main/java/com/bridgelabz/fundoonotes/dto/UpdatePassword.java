@@ -2,6 +2,13 @@ package com.bridgelabz.fundoonotes.dto;
 
 public class UpdatePassword {
 	
+	/**
+	 * 
+	 * @author Niranjan c.t
+	 * @version 1.0
+	 * @Date : 29-02-2019
+	 */
+	
 	
 		private String emailId;
 		private String password;

@@ -10,7 +10,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bridgeLabz.fundooNotes.exception.InvalidCredentialsException;
 import com.bridgelabz.fundoonotes.constants.UserException;
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 import com.bridgelabz.fundoonotes.dto.RegisterDto;
@@ -39,9 +38,6 @@ public class UserServiceImplemenation implements UserService {
 
 	@Autowired
 	EmailService emilService;
-	
-	@Autowired
-	UserException userException;
 
 	@Override
 	public boolean register(RegisterDto userDto) {
@@ -81,30 +77,81 @@ public class UserServiceImplemenation implements UserService {
 	@Override
 	public User login(LoginDto loginInformation) {
 		User fetchedUser = userRepository.getUser(loginInformation.getEmailId());
+		// user exist if user != null
 		if (fetchedUser != null) {
 			if (bCryptPasswordEncoder.matches(loginInformation.getPassword(), fetchedUser.getPassword())) {
+				// checking the user is verified or what?
 				if (fetchedUser.isVerified()) {
 					return fetchedUser;
 				}
+				/**
+				 * for not verified user i am sending the verification link
+				 */
 				String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/user/verification",
 						jwtToken.createJwtToken(fetchedUser.getUserId()));
-				emilService.sendMail(fetchedUser.getEmailId(), "Verification", unVerifiedUsertosendmail);			
+				emilService.sendMail(fetchedUser.getEmailId(), "Verification", unVerifiedUsertosendmail);
 			}
 			throw new UserException("You enterd invalid Credentials", 400);
 		}
+		/**
+		 * user not found
+		 */
 		throw new UserException("UserNotFound", 404);
 	}
 
 	@Override
-	public boolean isUserPresent(String emailId) {
-
-		return false;
+	public boolean isUserExist(String emailId) {
+		User userdata = userRepository.getUser(emailId);
+		if (userdata != null) {
+			//System.out.println("forgot : user found");
+			// checking the user is a verified user!
+			if (userdata.isVerified()) {
+				//System.out.println("forgot : user verified");
+				/**
+				 * reset password mail will send to user
+				 */
+				String emailLink = "http://localhost:8080/user/updatePassword"
+						+ jwtToken.createJwtToken(userdata.getUserId());
+				emilService.sendMail(userdata.getEmailId(), "Update Password Link", emailLink);
+				return true;
+			}
+			/**
+			 * for not verify user i am sending the verification link
+			 */
+			String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/user/verification",
+					jwtToken.createJwtToken(userdata.getUserId()));
+			emilService.sendMail(userdata.getEmailId(), "Verification", unVerifiedUsertosendmail);
+		}
+		/**
+		 * user not found
+		 */
+		throw new UserException("UserNotFound", 404);
 	}
 
 	@Override
-	public boolean updatePassword(UpdatePassword updatePassword, String token) {
+	public boolean updatePassword(UpdatePassword updatingPasswordinfo, String token) {
+		if (updatingPasswordinfo.getPassword().equals(updatingPasswordinfo.getConfirmPassword())) {
+			updatingPasswordinfo
+					.setConfirmPassword(bCryptPasswordEncoder.encode(updatingPasswordinfo.getConfirmPassword()));
+			userRepository.updatePassword(updatingPasswordinfo, jwtToken.decodeToken(token));
+			/**
+			 * sending notification mail after updating password to know user password
+			 * updated.
+			 */
+			emilService.sendMail(updatingPasswordinfo.getEmailId(), "Your Email Password Updated",
+					mailContaintAfterUpdatingPassword(updatingPasswordinfo));
+			return true;
+		}
+		throw new UserException(" PassWord mismatch .........", 401);
 
-		return false;
+	}
+
+	private String mailContaintAfterUpdatingPassword(UpdatePassword updatePasswordInformation) {
+		String passwordUpdateBodyContent = "Login Credentials \n" + "UserId : " + updatePasswordInformation.getEmailId()
+				+ "\nPassword : " + updatePasswordInformation.getPassword();
+		String loginString = "\nClick on the link to login\n";
+		String loginLink = "http://localhost:8080" + "/user/login";
+		return passwordUpdateBodyContent + loginString + loginLink;
 	}
 
 }

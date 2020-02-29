@@ -4,18 +4,10 @@ import javax.validation.constraints.Email;
 
 public class LoginDto {
 
-	private String name;
 	@Email
 	private String emailId;
 	private String password;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getEmailId() {
 		return emailId;

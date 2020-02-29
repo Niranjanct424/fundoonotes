@@ -5,6 +5,13 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author Niranjan c.t
+ * @version 1.0
+ * @Date : 29-02-2019
+ */
+
 @Component
 public class RegisterDto {
 

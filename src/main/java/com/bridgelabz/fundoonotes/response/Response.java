@@ -1,19 +1,27 @@
 package com.bridgelabz.fundoonotes.response;
 
+import com.bridgelabz.fundoonotes.dto.LoginDto;
+
 public class Response {
 
 	private String message;
-
 	private int statusCode;
+	private LoginDto dto;
 
+	public Response(String message, int statusCode, LoginDto dto) {
+		super();
+		this.message = message;
+		this.statusCode = statusCode;
+		this.dto = dto;
+	}
 
 	public Response(String message, int statusCode) {
 		this.message = message;
 		this.statusCode = statusCode;
-		
+
 	}
-	public Response(String message)
-	{
+
+	public Response(String message) {
 		this.message = message;
 
 	}
@@ -42,8 +50,6 @@ public class Response {
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
-
-
 
 	@Override
 	public String toString() {

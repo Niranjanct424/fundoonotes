@@ -1,5 +1,12 @@
 package com.bridgelabz.fundoonotes.repository;
 
+/**
+ * 
+ * @author Niranjan c.t
+ * @version 1.0
+ * @Date : 29-02-2019
+ */
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
@@ -25,7 +32,11 @@ public class UserRepository implements UserRepositoryInterface {
 		return newUser;
 	}
 
+	/**
+	 * getUser method produces the
+	 */
 	@Override
+	@Transactional
 	public User getUser(String emailId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query emailFetchQuery = session.createQuery("FROM User where emailId=:emailId");
@@ -63,7 +74,5 @@ public class UserRepository implements UserRepositoryInterface {
 		query.executeUpdate();
 		return true;
 	}
-
-
 
 }

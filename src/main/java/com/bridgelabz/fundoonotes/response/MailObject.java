@@ -2,6 +2,12 @@ package com.bridgelabz.fundoonotes.response;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author Niranjan c.t
+ * @version 1.0
+ * @Date : 29-02-2019
+ */
 
 public class MailObject implements Serializable {
 

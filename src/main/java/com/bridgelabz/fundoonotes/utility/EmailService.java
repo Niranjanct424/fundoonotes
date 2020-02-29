@@ -18,17 +18,25 @@ import org.springframework.stereotype.Service;
 
 @Component
 public class EmailService {
+	/**
+	 * @author Niranjan c.t
+	 * @version 1.0
+	 * @Date : 29-02-2019 @param toEmailId : sender Email id and password is we have
+	 *       set in the environment variable
+	 * @param subject
+	 * @param bodyContaint
+	 */
 
 	public boolean sendMail(String toEmailId, String subject, String bodyContaint) {
-		System.out.println("email"+toEmailId+"subject"+subject+"body"+bodyContaint);
-		Authenticator authentication = new Authenticator() {			
+		System.out.println("email" + toEmailId + "subject" + subject + "body" + bodyContaint);
+		Authenticator authentication = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				try {
-				return new PasswordAuthentication(Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD);
-				}catch (Exception e) {
+					return new PasswordAuthentication(Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD);
+				} catch (Exception e) {
 					// TODO: handle exception
-					System.out.println("error try"+e);
+					System.out.println("Exception retry " + e);
 					return null;
 				}
 			}
@@ -38,7 +46,7 @@ public class EmailService {
 			Transport.send(mimeMessageConfiguration(session, toEmailId, subject, bodyContaint));
 			return true;
 		} catch (MessagingException e) {
-			System.out.println("catch error"+e);
+			System.out.println("catch error" + e);
 			return false;
 		}
 

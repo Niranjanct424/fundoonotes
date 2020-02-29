@@ -2,6 +2,12 @@ package com.bridgelabz.fundoonotes.response;
 
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 
+/**
+ * 
+ * @author Niranjan c.t
+ * @version 1.0
+ * @Date : 29-02-2019
+ */
 
 public class UserDetailResponse {
 
@@ -9,7 +15,6 @@ public class UserDetailResponse {
 	private int statusCode;
 	private LoginDto loginInformation;
 
-	
 	public UserDetailResponse(String tokenCode, int statusCode, LoginDto loginInformation) {
 		this.tokenCode = tokenCode;
 		this.statusCode = statusCode;

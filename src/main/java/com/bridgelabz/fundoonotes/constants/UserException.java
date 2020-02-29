@@ -3,7 +3,7 @@ package com.bridgelabz.fundoonotes.constants;
 public class UserException extends RuntimeException {
 
 	/**
-	 * 
+	 * Created custom exception in which we can pass our own messages and status codes
 	 */
 	private static final long serialVersionUID = 1L;
 	
