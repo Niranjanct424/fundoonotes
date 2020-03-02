@@ -6,6 +6,7 @@ public class Response {
 
 	private String message;
 	private int statusCode;
+	@SuppressWarnings("unused")
 	private LoginDto dto;
 
 	public Response(String message, int statusCode, LoginDto dto) {

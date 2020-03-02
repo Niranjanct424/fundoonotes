@@ -24,6 +24,7 @@ import com.bridgelabz.fundoonotes.utility.Util;
 @Transactional
 public class UserServiceImplemenation implements UserService {
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private Environment environment;
 

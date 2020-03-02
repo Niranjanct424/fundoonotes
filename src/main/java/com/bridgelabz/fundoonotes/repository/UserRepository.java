@@ -35,6 +35,8 @@ public class UserRepository implements UserRepositoryInterface {
 	/**
 	 * getUser method produces the
 	 */
+	
+	@SuppressWarnings("rawtypes")
 	@Override
 	@Transactional
 	public User getUser(String emailId) {
@@ -44,6 +46,8 @@ public class UserRepository implements UserRepositoryInterface {
 		return (User) emailFetchQuery.uniqueResult();
 	}
 
+	
+	@SuppressWarnings("rawtypes")
 	@Override
 	@Transactional
 	public User getUser(Long id) {
@@ -53,6 +57,8 @@ public class UserRepository implements UserRepositoryInterface {
 		return (User) query.uniqueResult();
 	}
 
+	
+	@SuppressWarnings("rawtypes")
 	@Override
 	@Transactional
 	public boolean isVerifiedUserCheck(Long id) {
@@ -63,7 +69,9 @@ public class UserRepository implements UserRepositoryInterface {
 		query.executeUpdate();
 		return true;
 	}
-
+	
+	
+	@SuppressWarnings("rawtypes")
 	@Override
 	@Transactional
 	public boolean updatePassword(UpdatePassword updatePasswordinformation, long id) {
