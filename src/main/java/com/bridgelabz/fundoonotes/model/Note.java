@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * 
  * @author Niranjan c.t
  * @version 1.0
- * @Date : 29-02-2019
+ * @Date : 2-03-2019
  * @description: Note is the entity class model and it has variables and setter
  *               getters.
  */

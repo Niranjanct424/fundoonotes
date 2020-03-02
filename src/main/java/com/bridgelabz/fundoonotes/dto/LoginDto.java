@@ -2,6 +2,12 @@ package com.bridgelabz.fundoonotes.dto;
 
 import javax.validation.constraints.Email;
 
+/**
+ * 
+ * @author Niranjan c.t
+ * @version 1.0
+ * @Date : 29-02-2019
+ */
 public class LoginDto {
 
 	@Email
