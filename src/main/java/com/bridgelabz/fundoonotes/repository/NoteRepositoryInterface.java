@@ -5,30 +5,35 @@ import java.util.List;
 import com.bridgelabz.fundoonotes.model.Note;
 
 public interface NoteRepositoryInterface {
+	/**
+	 * @Desciption: Note repository consisting of abstract methods these methods
+	 *              used interact with database.
+	 */
 
 	/**
-	 * @Desciption:this method takes Note as input parameter stores note in database
+	 * @Desciption: Note repository consisting of abstract methods This method takes
+	 *              Note as input parameter stores note in database
 	 * @param newNote as input parameter
 	 * @return Note object
 	 */
 	public Note saveOrUpdate(Note newNote);
 
 	/**
-	 * @Desciption:this method takes noteId as input parameter and gives the note
+	 * @Desciption:This method takes noteId as input parameter and gives the note
 	 * @param newNote as input parameter
 	 * @return Note object
 	 */
 	public Note getNote(long noteId);
 
 	/**
-	 * @Desciption:this method takes noteId as input parameter and delete the Note
+	 * @Desciption:This method takes noteId as input parameter and delete the Note
 	 * @param noteId as input parameter
 	 * @return boolean value
 	 */
 	public boolean isDeletedNote(long noteId);
 
 	/**
-	 * @Desciption:this method takes noteId as input parameter and fetching all
+	 * @Desciption:This method takes noteId as input parameter and fetching all
 	 *                  user's note which are not trashed and archived from database
 	 *                  by taking noteId as input parameter.
 	 * @param noteId as input parameter
@@ -37,7 +42,7 @@ public interface NoteRepositoryInterface {
 	public List<Note> getAllNotes(long userId);
 
 	/**
-	 * @Desciption:this method takes noteId as input parameter and fetching all
+	 * @Desciption:This method takes noteId as input parameter and fetching all
 	 *                  user's note which are trashed from database.
 	 * @param noteId as input parameter
 	 * @return List of Notes.
@@ -60,9 +65,10 @@ public interface NoteRepositoryInterface {
 	 * @return List<Note>
 	 */
 	public List<Note> getAllArchivedNotes(long userId);
-	
+
 	/**
-	 * @Desciption:This method takes String type note title as parameter returns the Note.
+	 * @Desciption:This method takes String type note title as parameter returns the
+	 *                  Note.
 	 * @param userId
 	 * @return List<Note>
 	 */

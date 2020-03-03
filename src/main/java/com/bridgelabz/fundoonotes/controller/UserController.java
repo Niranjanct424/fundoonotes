@@ -28,7 +28,7 @@ import com.bridgelabz.fundoonotes.utility.JWTToken;
  */
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping
 public class UserController {
 
 	@Autowired
@@ -37,7 +37,7 @@ public class UserController {
 	@Autowired
 	private JWTToken jwtToken;
 
-	@PostMapping("registration")
+	@PostMapping("User/Registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto newUserDTO) {
 		boolean resultStatus = userService.register(newUserDTO);
 		if (!resultStatus) {
@@ -46,7 +46,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("registration successful", 201));
 	}
 
-	@GetMapping("/verification/{token}")
+	@GetMapping("User/Verification/{token}")
 	public ResponseEntity<Response> VerifyRegisterUser(@PathVariable("token") String token) {
 		if (userService.isVerifiedUserToken(token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Verification successful", 200));
@@ -56,7 +56,7 @@ public class UserController {
 	}
 
 	@SuppressWarnings("unused")
-	@PostMapping("login")
+	@PostMapping("User/Login")
 	public ResponseEntity<Response> login(@RequestBody LoginDto loginDto) {
 		User userdatafromdb = userService.login(loginDto);
 		// checking user exist
@@ -69,7 +69,7 @@ public class UserController {
 
 	}
 
-	@PostMapping("/forgotPassword")
+	@PostMapping("User/ForgotPassword")
 	public ResponseEntity<Response> forgotPassword(@RequestParam("emailId") String emailId) {
 		boolean userEmail = userService.isUserExist(emailId);
 		if (userEmail) {
@@ -78,7 +78,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Unauthorized user", 401));
 	}
 
-	@PutMapping("updatePassword/{token}")
+	@PutMapping("User/UpdatePassword/{token}")
 	public ResponseEntity<Response> updatedPassword(@PathVariable("token") String token,
 			@RequestBody() UpdatePassword upadatePassword) {
 		boolean updationStatus = userService.updatePassword(upadatePassword, token);

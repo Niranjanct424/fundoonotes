@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoonotes.constants;
+package com.bridgelabz.fundoonotes.exception;
 
 public class UserException extends RuntimeException {
 

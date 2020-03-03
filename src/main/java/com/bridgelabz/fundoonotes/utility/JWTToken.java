@@ -20,7 +20,6 @@ import com.auth0.jwt.interfaces.Verification;
 public class JWTToken {
 
 	private static final String TOKEN_SECRET_CODE = "Niranjan";
-
 	public String createJwtToken(long id) {
 		String generatedToken = null;
 		try {

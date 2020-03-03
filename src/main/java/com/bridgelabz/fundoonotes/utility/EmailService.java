@@ -33,6 +33,7 @@ public class EmailService {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				try {
 					return new PasswordAuthentication(Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD);
+					
 				} catch (Exception e) {
 					// TODO: handle exception
 					System.out.println("Exception retry " + e);

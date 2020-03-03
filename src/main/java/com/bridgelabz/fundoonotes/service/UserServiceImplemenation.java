@@ -10,10 +10,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundoonotes.constants.UserException;
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 import com.bridgelabz.fundoonotes.dto.RegisterDto;
 import com.bridgelabz.fundoonotes.dto.UpdatePassword;
+import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.EmailService;
@@ -55,7 +55,7 @@ public class UserServiceImplemenation implements UserService {
 		userRepository.save(newUser);
 		// user again fetched from database and mail sent for verification
 		User fetchedUserForVerification = userRepository.getUser(newUser.getEmailId());
-		String emailBodyContaintLink = Util.createLink("http://localhost:8080/user/verification",
+		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
 				jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
 
 		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
@@ -88,7 +88,7 @@ public class UserServiceImplemenation implements UserService {
 				/**
 				 * for not verified user i am sending the verification link
 				 */
-				String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/user/verification",
+				String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/User/Verification",
 						jwtToken.createJwtToken(fetchedUser.getUserId()));
 				emilService.sendMail(fetchedUser.getEmailId(), "Verification", unVerifiedUsertosendmail);
 			}
@@ -104,14 +104,14 @@ public class UserServiceImplemenation implements UserService {
 	public boolean isUserExist(String emailId) {
 		User userdata = userRepository.getUser(emailId);
 		if (userdata != null) {
-			//System.out.println("forgot : user found");
+			// System.out.println("forgot : user found");
 			// checking the user is a verified user!
 			if (userdata.isVerified()) {
-				//System.out.println("forgot : user verified");
+				// System.out.println("forgot : user verified");
 				/**
 				 * reset password mail will send to user
 				 */
-				String emailLink = "http://localhost:8080/user/updatePassword"
+				String emailLink = "http://localhost:8080/User/UpdatePassword"
 						+ jwtToken.createJwtToken(userdata.getUserId());
 				emilService.sendMail(userdata.getEmailId(), "Update Password Link", emailLink);
 				return true;
@@ -119,7 +119,7 @@ public class UserServiceImplemenation implements UserService {
 			/**
 			 * for not verify user i am sending the verification link
 			 */
-			String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/user/verification",
+			String unVerifiedUsertosendmail = Util.createLink("http://localhost:8080/User/Verification",
 					jwtToken.createJwtToken(userdata.getUserId()));
 			emilService.sendMail(userdata.getEmailId(), "Verification", unVerifiedUsertosendmail);
 		}
@@ -141,6 +141,7 @@ public class UserServiceImplemenation implements UserService {
 			 */
 			emilService.sendMail(updatingPasswordinfo.getEmailId(), "Your Email Password Updated",
 					mailContaintAfterUpdatingPassword(updatingPasswordinfo));
+
 			return true;
 		}
 		throw new UserException(" PassWord mismatch .........", 401);
@@ -151,7 +152,7 @@ public class UserServiceImplemenation implements UserService {
 		String passwordUpdateBodyContent = "Login Credentials \n" + "UserId : " + updatePasswordInformation.getEmailId()
 				+ "\nPassword : " + updatePasswordInformation.getPassword();
 		String loginString = "\nClick on the link to login\n";
-		String loginLink = "http://localhost:8080" + "/user/login";
+		String loginLink = "http://localhost:8080" + "/User/Login";
 		return passwordUpdateBodyContent + loginString + loginLink;
 	}
 
