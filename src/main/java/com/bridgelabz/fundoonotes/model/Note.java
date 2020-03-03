@@ -3,6 +3,9 @@ package com.bridgelabz.fundoonotes.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -11,12 +14,13 @@ import javax.persistence.Table;
  * @version 1.0
  * @Date : 2-03-2019
  * @description: Note is the entity class model and it has variables and setter
- *               getters.
+ *               getters,userId is the primary key
  */
 @Entity
 @Table(name = "note_details")
 public class Note {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long userId;
 	private String title;
 	private String description;
