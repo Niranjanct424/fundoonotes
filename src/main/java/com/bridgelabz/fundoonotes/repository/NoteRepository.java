@@ -26,6 +26,10 @@ public class NoteRepository implements NoteRepositoryInterface {
 	@Autowired
 	private EntityManager entityManager;
 
+	/**
+	 * @Description:which takes note as input parameter saves note to database.
+	 * @return note
+	 */
 	@Override
 	@Transactional
 	public Note saveOrUpdate(Note newNote) {
@@ -45,6 +49,7 @@ public class NoteRepository implements NoteRepositoryInterface {
 	}
 
 	@Override
+	@Transactional
 	public boolean isDeletedNote(long noteId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("DELETE From Note Where noteId:id");
@@ -53,34 +58,56 @@ public class NoteRepository implements NoteRepositoryInterface {
 		return true;
 	}
 
+	/**
+	 * @Description: sing HQL customized query from current session and fetching
+	 *               operation is carried out which returns boolean value after
+	 *               deleting the data from database.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public List<Note> getAllNotes(long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.unwrap(Session.class)
+				.createQuery("From Note Where user_id=:id and is_archived=false and is_trashed=false")
+				.setParameter("id", userId).getResultList();
+
 	}
 
+	/**
+	 * @Description:using HQL customized query from current session and if the notes
+	 *                    are not trashed and archived then simply fetch them.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Note> getAllTrashedNotes(long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.unwrap(Session.class).createQuery("From Note Where user_id=:id and is_trashed=true")
+				.setParameter("id", userId).getResultList();
 	}
 
+	/**
+	 * @Description:using HQL customized query from current session and if the notes
+	 *                    are not trashed and archived then will fetch them.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Note> getAllPinnedNotes(long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.unwrap(Session.class).createQuery("From Note Where user_id=:id and is_pinned=true")
+				.setParameter("id", userId).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Note> getAllArchivedNotes(long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.unwrap(Session.class).createQuery("From Note Where user_id=:id and is_archived=true")
+				.setParameter("id", userId).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Note> searchBy(String noteTitle) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.unwrap(Session.class).createQuery("From Note Where title=:title and is_trashed=false")
+				.setParameter("id", noteTitle).getResultList();
+
 	}
 
 }
