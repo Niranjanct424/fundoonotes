@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * @version 1.0
  * @Date : 2-03-2019
  * @description: Note is the entity class model and it has variables and setter
- *               getters,userId is the primary key
+ *               getters and toString() implemented,userId is the primary key
  */
 @Entity
 @Table(name = "note_details")

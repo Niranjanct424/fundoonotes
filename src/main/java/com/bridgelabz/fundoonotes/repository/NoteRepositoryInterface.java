@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bridgelabz.fundoonotes.model.Note;
 
-public interface NoteRepository {
+public interface NoteRepositoryInterface {
 
 	/**
 	 * @Desciption:this method takes Note as input parameter stores note in database
