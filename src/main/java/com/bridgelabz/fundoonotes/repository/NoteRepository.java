@@ -18,8 +18,7 @@ import com.bridgelabz.fundoonotes.model.Note;
  * @Description :unwrap() Return an object of the specified type to allow access
  *              to the provider-specific API. If the provider's query
  *              implementation does not support the specified class, the
- *              PersistenceException is thrown.
- *{@link Note}
+ *              PersistenceException is thrown. {@link Note}
  */
 @Repository
 public class NoteRepository implements NoteRepositoryInterface {
@@ -47,8 +46,11 @@ public class NoteRepository implements NoteRepositoryInterface {
 
 	@Override
 	public boolean isDeletedNote(long noteId) {
-
-		return false;
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("DELETE From Note Where noteId:id");
+		query.setParameter("id", noteId);
+		query.executeUpdate();
+		return true;
 	}
 
 	@Override
