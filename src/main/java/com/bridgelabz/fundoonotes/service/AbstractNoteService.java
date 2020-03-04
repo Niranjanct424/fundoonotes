@@ -3,39 +3,52 @@ package com.bridgelabz.fundoonotes.service;
 import java.util.List;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
-import com.bridgelabz.fundoonotes.dto.NoteUpdation;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.model.Note;
 
 public interface AbstractNoteService {
-	/**
-	 * @Description: Note abstract service methods
-	 * @param information
-	 * @param token
-	 */
+	
+	public boolean createNote(NoteDto noteDto, String token);
 
-	public void createNote(NoteDto information, String token);
 
-	public void updateNote(NoteUpdation information, String token);
+	public boolean updateNote(NoteDto noteDto, long noteId, String token);
 
-	public void deleteNote(long id, String token);
+	
+	public boolean deleteNote(long noteId, String token);
 
-	public List<Note> getAllNotes(String token);
+	
+	public boolean archieveNote(long noteId, String token);
 
-	public List<Note> getTrashedNotes(String token);
+	
+	public boolean isPinnedNote(long noteId, String token);
 
-	boolean deleteNotePemenetly(long id, String token);
+	
+	public boolean trashNote(long noteId, String token);
 
-	void archievNote(long id, String token);
+	
+	public List<Note> getallNotes(String token);
 
-	public List<Note> getArchiveNote(String token);
+	
+	public List<Note> getAllTrashedNotes(String token);
 
-	public void addColour(Long noteId, String token, String colour);
+	
+	public List<Note> getAllPinnedNotes(String token);
 
-	public void addReminder(Long noteId, String token, RemainderDto reminder);
+	
+	public List<Note> getAllArchivedNotes(String token);
 
-	public void removeReminder(Long noteId, String token, RemainderDto reminder);
 
-	public void pin(long id, String token);
+	public void changeColour(String token, long noteId, String noteColor);
+
+
+	public void setRemainderforNote(String token, long noteId, RemainderDto remainderDTO);
+
+
+	public void removeRemainderforNote(String token, long noteId);
+
+
+	public List<Note> searchByTitle(String token, String noteTitle);
+
+	
 
 }
