@@ -1,9 +1,11 @@
 package com.bridgelabz.fundoonotes.repository;
 
+import java.util.List;
+
 import com.bridgelabz.fundoonotes.dto.UpdatePassword;
 import com.bridgelabz.fundoonotes.model.User;
 
-public interface UserRepositoryInterface {
+public interface AbstractUserRepository {
 
 	public User save(User newUser);
 
@@ -17,6 +19,9 @@ public interface UserRepositoryInterface {
 
 	
 	public boolean updatePassword(UpdatePassword updatePasswordinformation, long id);
+
+
+	List<User> getUsers();
 
 
 }

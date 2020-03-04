@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.repository;
 
+import java.util.List;
+
 /**
  * 
  * @author Niranjan c.t
@@ -15,11 +17,12 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.bridgelabz.fundoo.Entity.UserInformation;
 import com.bridgelabz.fundoonotes.dto.UpdatePassword;
 import com.bridgelabz.fundoonotes.model.User;
 
 @Repository
-public class UserRepository implements UserRepositoryInterface {
+public class UserRepository implements AbstractUserRepository {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -81,6 +84,15 @@ public class UserRepository implements UserRepositoryInterface {
 		query.setParameter("id", id);
 		query.executeUpdate();
 		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<User> getUsers() {
+		Session currentsession = entityManager.unwrap(Session.class);
+		List<User> usersList = currentsession.createQuery("FROM User").getResultList();
+		return  usersList;
 	}
 
 }

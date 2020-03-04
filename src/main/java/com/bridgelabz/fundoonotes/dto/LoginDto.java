@@ -2,12 +2,18 @@ package com.bridgelabz.fundoonotes.dto;
 
 import javax.validation.constraints.Email;
 
+import org.springframework.stereotype.Component;
+
+import lombok.Data;
+
 /**
  * 
  * @author Niranjan c.t
  * @version 1.0
  * @Date : 29-02-2019
  */
+@Data
+@Component
 public class LoginDto {
 
 	@Email
@@ -15,20 +21,6 @@ public class LoginDto {
 	private String password;
 
 
-	public String getEmailId() {
-		return emailId;
-	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 }

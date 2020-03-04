@@ -21,7 +21,7 @@ import com.bridgelabz.fundoonotes.model.Note;
  *              PersistenceException is thrown. {@link Note}
  */
 @Repository
-public class NoteRepository implements NoteRepositoryInterface {
+public class NoteRepository implements AbstractNoteRepository {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -42,12 +42,14 @@ public class NoteRepository implements NoteRepositoryInterface {
 	@Transactional
 	public Note getNote(long noteId) {
 		Session session = entityManager.unwrap(Session.class);
+		@SuppressWarnings("rawtypes")
 		Query query = session.createQuery("FROM Note WHERE noteId=:id");
 		query.setParameter("id", noteId);
 		return (Note) query.uniqueResult();
 
 	}
 
+	@SuppressWarnings({ "rawtypes"})
 	@Override
 	@Transactional
 	public boolean isDeletedNote(long noteId) {

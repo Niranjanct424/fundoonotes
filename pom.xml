@@ -24,7 +24,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -107,11 +107,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 		</dependency>
-<!-- 	https://mvnrepository.com/artifact/com.rabbitmq/amqp-client 
-		<dependency>
-			<groupId>com.rabbitmq</groupId>
-			<artifactId>amqp-client</artifactId>
-			</dependency> -->
+		<!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client <dependency> 
+			<groupId>com.rabbitmq</groupId> <artifactId>amqp-client</artifactId> </dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+
+
 
 
 	</dependencies>
