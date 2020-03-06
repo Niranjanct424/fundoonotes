@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.exception.AuthorizationException;
+import com.bridgelabz.fundoonotes.exception.RemainderException;
 import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.model.User;
@@ -25,7 +26,6 @@ public class NoteServiceImplementation implements AbstractNoteService {
 	@Autowired
 	private JWTToken jwtToken;
 
-	@SuppressWarnings("unused")
 	private User authenticatedUser(String token) {
 		com.bridgelabz.fundoonotes.model.User fetchedUser = userRepository.getUser(jwtToken.decodeToken(token));
 		if (fetchedUser != null) {
@@ -34,7 +34,6 @@ public class NoteServiceImplementation implements AbstractNoteService {
 		throw new AuthorizationException("Authorization faild", 401);
 	}
 
-	@SuppressWarnings("unused")
 	private Note verifiedNote(long noteId) {
 		Note fetchedNote = noteRepository.getNote(noteId);
 		if (fetchedNote != null) {
@@ -103,8 +102,8 @@ public class NoteServiceImplementation implements AbstractNoteService {
 	}
 
 	/**
-	 * We will make the the note pinned if not already pinned 
-	 * we will make it un pinned in the second time of service called. 
+	 * We will make the the note pinned if not already pinned we will make it un
+	 * pinned in the second time of service called.
 	 */
 	@Override
 	public boolean isPinnedNote(long noteId, String token) {
@@ -117,7 +116,7 @@ public class NoteServiceImplementation implements AbstractNoteService {
 			noteRepository.saveOrUpdate(fetchedNote);
 			return true;
 		}
-		// making note Unpinned if note  already pinned 
+		// making note Unpinned if note already pinned
 		fetchedNote.setPinned(false);
 		fetchedNote.setUpdatedDate(LocalDateTime.now());
 		noteRepository.saveOrUpdate(fetchedNote);
@@ -125,8 +124,8 @@ public class NoteServiceImplementation implements AbstractNoteService {
 	}
 
 	/**
-	 * if the note is verified as valid note then will check note is not trashed 
-	 * its set to trashed or  if trashed already returns false
+	 * if the note is verified as valid note then will check note is not trashed its
+	 * set to trashed or if trashed already returns false
 	 */
 	@Override
 	public boolean trashNote(long noteId, String token) {
@@ -143,16 +142,15 @@ public class NoteServiceImplementation implements AbstractNoteService {
 
 	@Override
 	public List<Note> getallNotes(String token) {
-		
+
 		return noteRepository.getAllNotes(authenticatedUser(token).getUserId());
 	}
 
 	@Override
 	public List<Note> getAllTrashedNotes(String token) {
-		
-		List<Note> trashedNotes =  noteRepository.getAllTrashedNotes(authenticatedUser(token).getUserId());
-		if(!trashedNotes.isEmpty())
-		{
+
+		List<Note> trashedNotes = noteRepository.getAllTrashedNotes(authenticatedUser(token).getUserId());
+		if (!trashedNotes.isEmpty()) {
 			return trashedNotes;
 		}
 		return trashedNotes;
@@ -160,38 +158,70 @@ public class NoteServiceImplementation implements AbstractNoteService {
 
 	@Override
 	public List<Note> getAllPinnedNotes(String token) {
-		// TODO Auto-generated method stub
+		List<Note> pinnedNotes = noteRepository.getAllPinnedNotes(authenticatedUser(token).getUserId());
+		if (!pinnedNotes.isEmpty()) {
+			return pinnedNotes;
+		}
 		return null;
 	}
 
 	@Override
 	public List<Note> getAllArchivedNotes(String token) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Note> archivedNotes = noteRepository.getAllArchivedNotes(authenticatedUser(token).getUserId());
+		if (!archivedNotes.isEmpty()) {
+			return archivedNotes;
+		}
+		return archivedNotes;
 	}
 
 	@Override
 	public void changeColour(String token, long noteId, String noteColor) {
-		// TODO Auto-generated method stub
-
+		authenticatedUser(token);
+		Note fetchedNote = verifiedNote(noteId);
+		fetchedNote.setColor(noteColor);
+		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		noteRepository.saveOrUpdate(fetchedNote);
 	}
 
 	@Override
 	public void setRemainderforNote(String token, long noteId, RemainderDto remainderDTO) {
-		// TODO Auto-generated method stub
+		authenticatedUser(token);
+		// validate note
+		Note fetchedNote = verifiedNote(noteId);
+		if (fetchedNote.getReminderDate() == null) {
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			fetchedNote.setReminderDate(remainderDTO.getRemainder());
+			noteRepository.saveOrUpdate(fetchedNote);
+			return;
+		}
+		throw new RemainderException("Opps...Remainder already set!", 502);
 
 	}
 
 	@Override
 	public void removeRemainderforNote(String token, long noteId) {
-		// TODO Auto-generated method stub
-
+		authenticatedUser(token);
+		// validate note
+		Note fetchedNote = verifiedNote(noteId);
+		if (fetchedNote.getReminderDate() != null) {
+			fetchedNote.setReminderDate(null);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			noteRepository.saveOrUpdate(fetchedNote);
+			return;
+		}
+		throw new RemainderException("Opps...Remainder already removed!", 502);
 	}
 
 	@Override
 	public List<Note> searchByTitle(String token, String noteTitle) {
-		// TODO Auto-generated method stub
-		return null;
+		authenticatedUser(token);
+		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
+		if (!fetchedNote.isEmpty()) {
+			return fetchedNote;
+
+		}
+		throw new com.bridgelabz.fundoonotes.exception.NoteException("Note Not Found Exception", 502);
+
 	}
 
 }
