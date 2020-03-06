@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.response;
 
+import java.util.List;
+
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 
 public class Response {
@@ -8,13 +10,25 @@ public class Response {
 	private int statusCode;
 	@SuppressWarnings("unused")
 	private LoginDto dto;
+	
+	private Object object;
 
-	public Response(String message, int statusCode, LoginDto dto) {
-		super();
+	List<String> details;
+
+	/**
+	 * Constructor to fetch response if exist any.
+	 * 
+	 * @param message    as String input parameter
+	 * @param statusCode as integer input parameter
+	 * @param object     as User Object
+	 */
+	public Response(String message, int statusCode, Object object) {
 		this.message = message;
 		this.statusCode = statusCode;
-		this.dto = dto;
+		this.object = object;
 	}
+
+
 
 	public Response(String message, int statusCode) {
 		this.message = message;

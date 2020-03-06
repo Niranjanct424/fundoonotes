@@ -1,9 +1,12 @@
 package com.bridgelabz.fundoonotes.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
+import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.response.Response;
 import com.bridgelabz.fundoonotes.service.AbstractNoteService;
 import com.bridgelabz.fundoonotes.utility.Util;
@@ -120,6 +124,19 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response("Opps...Already trashed!", Util.BAD_REQUEST_RESPONSE_CODE));
 	}
+	
+	
+	@GetMapping("fetch/notes")
+	public ResponseEntity<Response> getAllNotes(@RequestHeader String token) {
+		List<Note> notes = noteService.getallNotes(token);
+		if (!notes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("found", 200, notes));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+	}
+	
+	
 	
 	
 	
