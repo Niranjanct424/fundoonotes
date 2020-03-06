@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
@@ -17,6 +18,7 @@ import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.JWTToken;
 
+@Service
 public class NoteServiceImplementation implements AbstractNoteService {
 
 	@Autowired
@@ -63,12 +65,17 @@ public class NoteServiceImplementation implements AbstractNoteService {
 	public boolean updateNote(NoteDto noteDto, long noteId, String token) {
 		// using token we will get the user
 		authenticatedUser(token);
+		System.out.println("user verified ");
 		// here we get the existing note
 		Note fetchedNote = verifiedNote(noteId);
+		System.out.println("user note fetched ");
 		BeanUtils.copyProperties(noteDto, fetchedNote);
+		System.out.println("user info copied ");
 		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		System.out.println("user detials updated ");
 		noteRepository.saveOrUpdate(fetchedNote);
-		return false;
+		System.out.println("user Note updatation successful ");
+		return true;
 	}
 
 	/**

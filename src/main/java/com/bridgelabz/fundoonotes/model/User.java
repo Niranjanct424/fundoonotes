@@ -28,6 +28,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotNull
+	@Column(name = "user_id")
 	private long userId;
 	@NotNull
 	private String name;

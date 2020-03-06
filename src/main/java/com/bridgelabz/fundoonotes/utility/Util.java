@@ -19,22 +19,19 @@ public class Util {
 	public static final int NOTE_NOT_FOUND_EXCEPTION_STATUS = 300;
 	public static final int BAD_REQUEST_RESPONSE_CODE = 400;
 	public static final int USER_AUTHENTICATION_EXCEPTION_STATUS = 401;
-	public static final int NOT_FOUND_RESPONSE_CODE = 404;
+	public static final int NOT_FOUND_RESPONSE_CODE = 404;	
 	public static final String NO_NOTES_FOUND_MESSAGE = "Opps...No notes Found!";
 	public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
 	public static final String IP_ADDRESS = "http://localhost:";
 	public static final String REGESTATION_VERIFICATION_LINK = "/user/verification";
-	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...User not found!";
-	public static final String NOTE_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...Note not found!";
-	public static final String LABEL_NOT_FOUND_EXCEPTION_MESSAGE = "Opps...Label not found!";
-	public static final String USER_AUTHORIZATION_EXCEPTION_MESSAGE = "Opps...Authorization failed!";
-	public static final String LABEL_ALREADY_EXIST_EXCEPTION_MESSAGE = "Opps...Label already exist!";
-	/**
-	 * environment variable
-	 */
+	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "User not found!";
+	public static final String NOTE_NOT_FOUND_EXCEPTION_MESSAGE = "Note not found!";
+	public static final String LABEL_NOT_FOUND_EXCEPTION_MESSAGE = "Label not found!";
+	public static final String USER_AUTHORIZATION_EXCEPTION_MESSAGE = "Authorization failed!";
+	public static final String LABEL_ALREADY_EXIST_EXCEPTION_MESSAGE = "Label already exist!";
+	// environment variable
 	public static final String SENDER_EMAIL_ID = System.getenv("email");
 	public static final String SENDER_PASSWORD = System.getenv("password");
-	
 
 	/**
 	 * preventing from creating instance of the class

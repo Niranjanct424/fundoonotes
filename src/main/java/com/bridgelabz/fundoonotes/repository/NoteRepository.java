@@ -54,7 +54,7 @@ public class NoteRepository implements AbstractNoteRepository {
 	@Transactional
 	public boolean isDeletedNote(long noteId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("DELETE From Note Where noteId:id");
+		Query query = session.createQuery("DELETE FROM Note WHERE noteId=:id");
 		query.setParameter("id", noteId);
 		query.executeUpdate();
 		return true;
@@ -70,7 +70,7 @@ public class NoteRepository implements AbstractNoteRepository {
 	@Transactional
 	public List<Note> getAllNotes(long userId) {
 		return entityManager.unwrap(Session.class)
-				.createQuery("From Note Where user_id=:id and is_archived=false and is_trashed=false")
+				.createQuery("FROM Note WHERE user_id=:id and is_trashed=false and is_archived=false")
 				.setParameter("id", userId).getResultList();
 
 	}
