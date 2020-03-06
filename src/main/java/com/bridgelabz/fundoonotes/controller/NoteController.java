@@ -77,6 +77,50 @@ public class NoteController {
 
 	}
 	
+	@ApiOperation(value = "archive an existing note for valid user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "note archived"),
+			@ApiResponse(code = 300, message = "Opps...Note not found!"),
+			@ApiResponse(code = 400, message = "Opps...Already archived!"),
+			@ApiResponse(code = 401, message = "Opps...Authorization failed!") })
+	@PatchMapping("{id}/archieve")
+	public ResponseEntity<Response> archieveNote(@PathVariable("id") long noteId,
+			@RequestHeader("token") String token) {
+		if (noteService.archieveNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archieved", Util.OK_RESPONSE_CODE));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response("Opps...Already archived!", Util.BAD_REQUEST_RESPONSE_CODE));
+	}
+	
+	
+	@ApiOperation(value = "pin/unpin operation of existing note for valid user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "note pinned"),
+			@ApiResponse(code = 201, message = "note unpinned"),
+			@ApiResponse(code = 300, message = "Opps...Note not found!"),
+			@ApiResponse(code = 401, message = "Opps...Authorization failed!") })
+	@PatchMapping("{id}/pin")
+	public ResponseEntity<Response> pinNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
+		if (noteService.isPinnedNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note pinned", Util.OK_RESPONSE_CODE));
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note unpinned", Util.OK_RESPONSE_CODE));
+	}
+	
+	
+	@ApiOperation(value = "trash operation for an existing note for valid user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "note pinned"),
+			@ApiResponse(code = 300, message = "Opps...Note not found!"),
+			@ApiResponse(code = 400, message = "Opps...Already trashed!"),
+			@ApiResponse(code = 401, message = "Opps...Authorization failed!") })
+	@DeleteMapping("{id}/trash")
+	public ResponseEntity<Response> trashNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
+		if (noteService.trashNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note trashed", Util.OK_RESPONSE_CODE));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response("Opps...Already trashed!", Util.BAD_REQUEST_RESPONSE_CODE));
+	}
+	
 	
 	
 
