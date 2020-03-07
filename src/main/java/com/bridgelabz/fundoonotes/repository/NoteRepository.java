@@ -107,7 +107,7 @@ public class NoteRepository implements AbstractNoteRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Note> searchBy(String noteTitle) {
-		return entityManager.unwrap(Session.class).createQuery("From Note Where title=:title and is_trashed=false")
+		return entityManager.unwrap(Session.class).createQuery("From Note Where title=:id and is_trashed=false")
 				.setParameter("id", noteTitle).getResultList();
 
 	}

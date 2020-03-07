@@ -221,9 +221,13 @@ public class NoteServiceImplementation implements AbstractNoteService {
 
 	@Override
 	public List<Note> searchByTitle(String token, String noteTitle) {
+		System.out.println("inside searchByTittle method ");
 		authenticatedUser(token);
+		System.out.println("We got the autheicated user");
 		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
+		System.out.println("fetchedNote we get is  "+fetchedNote);
 		if (!fetchedNote.isEmpty()) {
+			System.out.println("returning fetched note");
 			return fetchedNote;
 
 		}
