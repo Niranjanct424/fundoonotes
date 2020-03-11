@@ -37,21 +37,22 @@ public class UserController {
 	@Autowired
 	private JWTToken jwtToken;
 
+	@SuppressWarnings("unchecked")
 	@PostMapping("User/Registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto newUserDTO) {
 		boolean resultStatus = userService.register(newUserDTO);
 		if (!resultStatus) {
-			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("Email already exist", 208));
+			return (ResponseEntity<Response>) ResponseEntity.status(HttpStatus.ALREADY_REPORTED);
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("registration successful", 201));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("registration successful"));
 	}
 
 	@GetMapping("User/Verification/{token}")
 	public ResponseEntity<Response> VerifyRegisterUser(@PathVariable("token") String token) {
 		if (userService.isVerifiedUserToken(token)) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("Verification successful", 200));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Verification successful"));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response("Verification Failed", 406));
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response("Verification Failed"));
 
 	}
 
@@ -63,9 +64,9 @@ public class UserController {
 		if (userdatafromdb != null) {
 			String newToken = jwtToken.createJwtToken(userdatafromdb.getUserId());
 			System.out.println("Token : " + newToken);
-			return ResponseEntity.status(HttpStatus.OK).header(newToken).body(new Response("Login Successful ", 200));
+			return ResponseEntity.status(HttpStatus.OK).header(newToken).body(new Response("Login Successful "));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("check mail for verification", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("check mail for verification"));
 
 	}
 
@@ -73,9 +74,9 @@ public class UserController {
 	public ResponseEntity<Response> forgotPassword(@RequestParam("emailId") String emailId) {
 		boolean userEmail = userService.isUserExist(emailId);
 		if (userEmail) {
-			return ResponseEntity.status(HttpStatus.FOUND).body(new Response(" user Exist ", 302));
+			return ResponseEntity.status(HttpStatus.FOUND).body(new Response(" user Exist "));
 		}
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Unauthorized user", 401));
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Unauthorized user"));
 	}
 
 	@PutMapping("User/UpdatePassword/{token}")
@@ -83,9 +84,9 @@ public class UserController {
 			@RequestBody() UpdatePassword upadatePassword) {
 		boolean updationStatus = userService.updatePassword(upadatePassword, token);
 		if (updationStatus) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("Password updated sucessfully", 200));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Password updated sucessfully"));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("failed to update the password", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("failed to update the password"));
 
 	}
 

@@ -21,7 +21,7 @@ import com.bridgelabz.fundoonotes.model.Note;
  *              PersistenceException is thrown. {@link Note}
  */
 @Repository
-public class NoteRepository implements AbstractNoteRepository {
+public class NoteRepository implements INoteRepository {
 
 	@Autowired
 	private EntityManager entityManager;

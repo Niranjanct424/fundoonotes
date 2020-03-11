@@ -21,7 +21,7 @@ import com.bridgelabz.fundoonotes.dto.UpdatePassword;
 import com.bridgelabz.fundoonotes.model.User;
 
 @Repository
-public class UserRepository implements AbstractUserRepository {
+public class UserRepository implements IUserRepository {
 
 	@Autowired
 	private EntityManager entityManager;

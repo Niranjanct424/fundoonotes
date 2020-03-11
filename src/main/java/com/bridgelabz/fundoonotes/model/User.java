@@ -49,8 +49,14 @@ public class User {
 	@JsonIgnore
 	@JoinColumn(name = "user_id")
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Note> note;
+	private List<Note> notes;
 
+	@JsonIgnore
+	@JoinColumn(name = "user_id")
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Label> labels;
+
+	
 	public User(long id, String name, String password, String mobileNumber, String emailId) {
 		super();
 		this.userId = id;

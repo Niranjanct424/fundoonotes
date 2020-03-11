@@ -21,7 +21,7 @@ import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.response.Response;
-import com.bridgelabz.fundoonotes.service.AbstractNoteService;
+import com.bridgelabz.fundoonotes.service.INoteService;
 import com.bridgelabz.fundoonotes.utility.Util;
 
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +40,7 @@ public class NoteController {
 	 */
 
 	@Autowired
-	private AbstractNoteService noteService;
+	private INoteService noteService;
 
 	@ApiOperation(value = "create a new note for valid user")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "note created"),

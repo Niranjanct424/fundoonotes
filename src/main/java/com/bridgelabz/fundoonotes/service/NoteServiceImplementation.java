@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
@@ -19,7 +20,7 @@ import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.JWTToken;
 
 @Service
-public class NoteServiceImplementation implements AbstractNoteService {
+public class NoteServiceImplementation implements INoteService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -41,7 +42,7 @@ public class NoteServiceImplementation implements AbstractNoteService {
 		if (fetchedNote != null) {
 			return fetchedNote;
 		}
-		throw new UserException("Note Not Found", 404);
+		throw new UsernameNotFoundException("Note Not Found");
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class NoteServiceImplementation implements AbstractNoteService {
 			BeanUtils.copyProperties(noteDto, newNote);
 			newNote.setCreatedDate(LocalDateTime.now());
 			newNote.setColor("white");
-			fetchedUser.getNote().add(newNote);
+			fetchedUser.getNotes().add(newNote);
 			noteRepository.saveOrUpdate(newNote);
 			return true;
 		}

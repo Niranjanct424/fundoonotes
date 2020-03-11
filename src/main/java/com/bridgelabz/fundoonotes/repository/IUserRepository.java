@@ -5,7 +5,7 @@ import java.util.List;
 import com.bridgelabz.fundoonotes.dto.UpdatePassword;
 import com.bridgelabz.fundoonotes.model.User;
 
-public interface AbstractUserRepository {
+public interface IUserRepository {
 
 	public User save(User newUser);
 

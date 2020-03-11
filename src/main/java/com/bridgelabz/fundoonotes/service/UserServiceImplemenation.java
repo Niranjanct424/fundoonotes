@@ -13,7 +13,11 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 import com.bridgelabz.fundoonotes.dto.RegisterDto;
 import com.bridgelabz.fundoonotes.dto.UpdatePassword;
+import com.bridgelabz.fundoonotes.exception.EmailSentFailedException;
+import com.bridgelabz.fundoonotes.exception.InvalidCredentialException;
+import com.bridgelabz.fundoonotes.exception.PasswordMissMatchException;
 import com.bridgelabz.fundoonotes.exception.UserException;
+import com.bridgelabz.fundoonotes.exception.UserNotFoundException;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.EmailService;
@@ -61,7 +65,7 @@ public class UserServiceImplemenation implements UserService {
 		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
 			return true;
 		else
-			throw new UserException("Opps...Error sending verification mail!", 500);
+			throw new EmailSentFailedException("Opps...Error sending verification mail!");
 
 	}
 
@@ -92,12 +96,12 @@ public class UserServiceImplemenation implements UserService {
 						jwtToken.createJwtToken(fetchedUser.getUserId()));
 				emilService.sendMail(fetchedUser.getEmailId(), "Verification", unVerifiedUsertosendmail);
 			}
-			throw new UserException("You enterd invalid Credentials", 400);
+			throw new InvalidCredentialException("You enterd invalid Credentials");
 		}
 		/**
 		 * user not found
 		 */
-		throw new UserException("UserNotFound", 404);
+		throw new UserNotFoundException("UserNotFound");
 	}
 
 	@Override
@@ -126,7 +130,7 @@ public class UserServiceImplemenation implements UserService {
 		/**
 		 * user not found
 		 */
-		throw new UserException("UserNotFound", 404);
+		throw new UserNotFoundException("UserNotFound");
 	}
 
 	@Override
@@ -144,7 +148,7 @@ public class UserServiceImplemenation implements UserService {
 
 			return true;
 		}
-		throw new UserException(" PassWord mismatch .........", 401);
+		throw new PasswordMissMatchException(" PassWord mismatch .........");
 
 	}
 

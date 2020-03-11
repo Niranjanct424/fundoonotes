@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bridgelabz.fundoonotes.model.Note;
 
-public interface AbstractNoteRepository {
+public interface INoteRepository {
 	/**
 	 * @Desciption: Note repository consisting of abstract methods these methods
 	 *              used interact with database.

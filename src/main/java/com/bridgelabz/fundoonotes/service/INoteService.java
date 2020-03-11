@@ -6,7 +6,7 @@ import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.model.Note;
 
-public interface AbstractNoteService {
+public interface INoteService {
 	
 	public boolean createNote(NoteDto noteDto, String token);
 

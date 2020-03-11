@@ -10,7 +10,7 @@ public class Response {
 	private int statusCode;
 	@SuppressWarnings("unused")
 	private LoginDto dto;
-	
+
 	private Object object;
 
 	List<String> details;
@@ -28,16 +28,14 @@ public class Response {
 		this.object = object;
 	}
 
+	public Response(String message) {
+		this.message = message;
 
+	}
 
 	public Response(String message, int statusCode) {
 		this.message = message;
 		this.statusCode = statusCode;
-
-	}
-
-	public Response(String message) {
-		this.message = message;
 
 	}
 

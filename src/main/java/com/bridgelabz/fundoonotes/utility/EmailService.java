@@ -31,14 +31,10 @@ public class EmailService {
 		Authenticator authentication = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				try {
+				
 					return new PasswordAuthentication(Util.SENDER_EMAIL_ID, Util.SENDER_PASSWORD);
 					
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("Exception retry " + e);
-					return null;
-				}
+				
 			}
 		};
 		Session session = Session.getInstance(mailPropertiesSettings(), authentication);
