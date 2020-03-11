@@ -2,12 +2,15 @@ package com.bridgelabz.fundoonotes.response;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 
 public class Response {
 
 	private String message;
 	private int statusCode;
+	private HttpStatus httpStatus;
 	@SuppressWarnings("unused")
 	private LoginDto dto;
 
@@ -36,6 +39,12 @@ public class Response {
 	public Response(String message, int statusCode) {
 		this.message = message;
 		this.statusCode = statusCode;
+
+	}
+	
+	public Response(String message, HttpStatus statusCode) {
+		this.message = message;
+		httpStatus = statusCode;
 
 	}
 

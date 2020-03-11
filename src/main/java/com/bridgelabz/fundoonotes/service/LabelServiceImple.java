@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoonotes.dto.LabelDto;
@@ -66,7 +67,7 @@ public class LabelServiceImple implements ILabelServices {
 			labelRepository.save(newLabel);
 			return;
 		}
-		throw new LabelAlreadyExistException("Label Alreay exist in the database");
+		throw new LabelAlreadyExistException("Label Alreay exist in the database",208);
 	}
 
 	@SuppressWarnings("null")
@@ -84,7 +85,7 @@ public class LabelServiceImple implements ILabelServices {
 			labelRepository.save(newLabel);
 			return true;
 		}
-		throw new LabelAlreadyExistException("Label Alreay exist in the database");
+		throw new LabelAlreadyExistException("Label Alreay exist in the database",208);
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class LabelServiceImple implements ILabelServices {
 			return true;
 
 		}
-		throw new LabelAlreadyExistException("label already exist");
+		throw new LabelAlreadyExistException("label already exist",208);
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class LabelServiceImple implements ILabelServices {
 			noteRepository.saveOrUpdate(fetchedNote);
 			return true;
 		}
-		throw new LabelAlreadyExistException("label already exist");
+		throw new LabelAlreadyExistException("label already exist",208);
 	}
 
 	@Override
