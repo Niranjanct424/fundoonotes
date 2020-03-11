@@ -50,6 +50,7 @@ public class UserServiceImplemenation implements UserService {
 		if (fetchedUser != null) {
 			return false;
 		}
+		
 		User newUser = new User();
 		BeanUtils.copyProperties(userDto, newUser);
 		newUser.setCreateDateTime(LocalDateTime.now());
@@ -61,7 +62,8 @@ public class UserServiceImplemenation implements UserService {
 		User fetchedUserForVerification = userRepository.getUser(newUser.getEmailId());
 		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
 				jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
-
+		
+		
 		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
 			return true;
 		else
@@ -130,7 +132,15 @@ public class UserServiceImplemenation implements UserService {
 		/**
 		 * user not found
 		 */
-		throw new UserNotFoundException("UserNotFound");
+		try
+		{
+			throw new UserNotFoundException("UserNotFound");
+		}
+		catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+		
 	}
 
 	@Override

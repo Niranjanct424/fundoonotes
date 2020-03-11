@@ -1,12 +1,13 @@
 package com.bridgelabz.fundoonotes.exception;
 
-public class LabelAlreadyExistException extends RuntimeException {
+public class ColaboratorException extends RuntimeException{
+	
 
 	private static final long serialVersionUID = 1L;
 	private final int status;
 
 	
-	public LabelAlreadyExistException(String message, int status) {
+	public ColaboratorException(String message, int status) {
 		super(message);
 		this.status = status;
 	}
@@ -14,5 +15,5 @@ public class LabelAlreadyExistException extends RuntimeException {
 	public int getStatus() {
 		return status;
 	}
-	
+
 }

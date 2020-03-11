@@ -1,11 +1,19 @@
 package com.bridgelabz.fundoonotes.exception;
 
 public class InvalidCredentialException extends RuntimeException{
-	private static final long serialVersionUID = 1L;
+	
 
-	public InvalidCredentialException(String message) {
+	private static final long serialVersionUID = 1L;
+	private final int status;
+
+	
+	public InvalidCredentialException(String message, int status) {
 		super(message);
-		// TODO Auto-generated constructor stub
+		this.status = status;
+	}
+
+	public int getStatus() {
+		return status;
 	}
 	
 	

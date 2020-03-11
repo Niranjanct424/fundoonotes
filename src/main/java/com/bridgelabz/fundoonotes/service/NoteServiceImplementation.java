@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.exception.AuthorizationException;
+import com.bridgelabz.fundoonotes.exception.NoteException;
 import com.bridgelabz.fundoonotes.exception.RemainderException;
 import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.model.Note;
@@ -48,35 +49,48 @@ public class NoteServiceImplementation implements INoteService {
 	@Override
 	public boolean createNote(NoteDto noteDto, String token) {
 
-		User fetchedUser = authenticatedUser(token);
+		
+		try {
+			User fetchedUser = authenticatedUser(token);
 
-		if (fetchedUser != null) {
-			Note newNote = new Note();
-			BeanUtils.copyProperties(noteDto, newNote);
-			newNote.setCreatedDate(LocalDateTime.now());
-			newNote.setColor("white");
-			fetchedUser.getNotes().add(newNote);
-			noteRepository.saveOrUpdate(newNote);
-			return true;
+			if (fetchedUser != null) {
+				Note newNote = new Note();
+				BeanUtils.copyProperties(noteDto, newNote);
+				newNote.setCreatedDate(LocalDateTime.now());
+				newNote.setColor("white");
+				fetchedUser.getNotes().add(newNote);
+				noteRepository.saveOrUpdate(newNote);
+				return true;
+			}
+			
+		} catch (AuthorizationException e) {
+			System.out.println("AuthorizationException faild: ");
 		}
-		throw new AuthorizationException("Authorization faild", 401);
+		return false;
+
 	}
 
 	@Override
 	public boolean updateNote(NoteDto noteDto, long noteId, String token) {
-		// using token we will get the user
-		authenticatedUser(token);
-		System.out.println("user verified ");
-		// here we get the existing note
-		Note fetchedNote = verifiedNote(noteId);
-		System.out.println("user note fetched ");
-		BeanUtils.copyProperties(noteDto, fetchedNote);
-		System.out.println("user info copied ");
-		fetchedNote.setUpdatedDate(LocalDateTime.now());
-		System.out.println("user detials updated ");
-		noteRepository.saveOrUpdate(fetchedNote);
-		System.out.println("user Note updatation successful ");
-		return true;
+		try {
+			// using token we will get the user
+			authenticatedUser(token);
+			System.out.println("user verified ");
+			// here we get the existing note
+			Note fetchedNote = verifiedNote(noteId);
+			System.out.println("user note fetched ");
+			BeanUtils.copyProperties(noteDto, fetchedNote);
+			System.out.println("user info copied ");
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			System.out.println("user detials updated ");
+			noteRepository.saveOrUpdate(fetchedNote);
+			System.out.println("user Note updatation successful ");
+			return true;
+		} catch (NoteException e) {
+			System.out.println("NoteUpdate Faild");
+		}
+		return false;
+		
 	}
 
 	/**
@@ -85,10 +99,16 @@ public class NoteServiceImplementation implements INoteService {
 	 */
 	@Override
 	public boolean deleteNote(long noteId, String token) {
-		authenticatedUser(token);
-		verifiedNote(noteId);
-		noteRepository.isDeletedNote(noteId);
-		return true;
+		try {
+			authenticatedUser(token);
+			verifiedNote(noteId);
+			noteRepository.isDeletedNote(noteId);
+			return true;
+		} catch (NoteException e) {
+			System.out.println("Faild to delete Note");
+		}
+		return false;
+		
 	}
 
 	/**
@@ -226,7 +246,7 @@ public class NoteServiceImplementation implements INoteService {
 		authenticatedUser(token);
 		System.out.println("We got the autheicated user");
 		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
-		System.out.println("fetchedNote we get is  "+fetchedNote);
+		System.out.println("fetchedNote we get is  " + fetchedNote);
 		if (!fetchedNote.isEmpty()) {
 			System.out.println("returning fetched note");
 			return fetchedNote;
