@@ -128,7 +128,7 @@ public class LabelServiceImple implements ILabelServices {
 			return true;
 		}
 
-		throw new LabelNotFoundException("Label Not present in the database to update the labelName");
+		throw new LabelNotFoundException("Label Not present in the database to update the labelName",404);
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class LabelServiceImple implements ILabelServices {
 			labelRepository.delete(fetchedLabel.get());
 			return true;
 		}
-		throw new LabelNotFoundException("Label Not present in the database");
+		throw new LabelNotFoundException("Label Not present in the database",404);
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class LabelServiceImple implements ILabelServices {
 		if (fetchedLabel.isPresent()) {
 			return fetchedLabel.get().getNoteList();
 		}
-		throw new LabelNotFoundException("Label Not found");
+		throw new LabelNotFoundException("Label Not found",404);
 	}
 
 }

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
+import com.bridgelabz.fundoonotes.exception.NoteException;
+import com.bridgelabz.fundoonotes.exception.NoteNotFoundException;
+import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.response.Response;
 import com.bridgelabz.fundoonotes.service.INoteService;
@@ -51,8 +54,10 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new Response("note created", Util.CREATED_RESPONSE_CODE));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps... Error creating note!", Util.BAD_REQUEST_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(new Response("Opps... Error creating note!", Util.BAD_REQUEST_RESPONSE_CODE));
+		
+		throw new NoteException("Opps... Error creating note!", 400);
 	}
 
 	@ApiOperation(value = "update an existing note for valid user")
@@ -66,8 +71,9 @@ public class NoteController {
 		if (noteService.updateNote(noteDto, noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note updated", Util.OK_RESPONSE_CODE));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...Error updating note!", Util.BAD_REQUEST_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(new Response("Opps...Error updating note!", Util.BAD_REQUEST_RESPONSE_CODE));
+		throw new NoteException("Opps...Error updating note!", 502);
 	}
 
 	@ApiOperation(value = "delete an existing note for valid user")
@@ -80,8 +86,9 @@ public class NoteController {
 		if (noteService.deleteNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note deleted", Util.OK_RESPONSE_CODE));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...Error deleting note!", Util.BAD_REQUEST_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(new Response("Opps...Error deleting note!", Util.BAD_REQUEST_RESPONSE_CODE));
+		throw new NoteException("Opps...Error deleting note!", 502);
 
 	}
 
@@ -96,8 +103,10 @@ public class NoteController {
 		if (noteService.archieveNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archieved", Util.OK_RESPONSE_CODE));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...Already archived!", Util.BAD_REQUEST_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(new Response("Opps...Already archived!", Util.BAD_REQUEST_RESPONSE_CODE));
+		throw new NoteException("Opps...Already archived!", 502);
+		
 	}
 
 	@ApiOperation(value = "pin/unpin operation of existing note for valid user")
@@ -123,8 +132,9 @@ public class NoteController {
 		if (noteService.trashNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note trashed", Util.OK_RESPONSE_CODE));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...Already trashed!", Util.BAD_REQUEST_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(new Response("Opps...Already trashed!", Util.BAD_REQUEST_RESPONSE_CODE));
+		throw new NoteException("Opps...Already trashed!", 502);
 	}
 
 	@GetMapping("fetch/notes")
@@ -133,8 +143,9 @@ public class NoteController {
 		if (!notes.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("found", 200, notes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+		throw new NoteNotFoundException("Opps...Note Not Found!", 404);
 	}
 
 	@ApiOperation(value = "fetch all trashed notes for valid user")
@@ -148,8 +159,9 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new Response("Trashed notes are", Util.OK_RESPONSE_CODE, trashedNotes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+		throw new NoteNotFoundException("Opps...Trashed Notes Not Found!", 404);
 	}
 
 	@ApiOperation(value = "fetch all pinned notes for valid user")
@@ -164,8 +176,9 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new Response("Pinned notes are", Util.OK_RESPONSE_CODE, pinnedNotes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+		throw new NoteNotFoundException("Opps...Pinned Notes Not Found!", 404);
 	}
 
 	@ApiOperation(value = "fetch all archived notes for valid user")
@@ -173,7 +186,7 @@ public class NoteController {
 			@ApiResponse(code = 300, message = "Opps...Note not found!"),
 			@ApiResponse(code = 401, message = "Opps...Authorization failed!"),
 			@ApiResponse(code = 404, message = "Opps...No notes Found!") })
-	@GetMapping("fetch/notes/archived")
+	@GetMapping("fetch/notes/archived") 
 	public ResponseEntity<Response> fetchAllArchivedNotes(@RequestHeader("token") String token) {
 
 		List<Note> archivedNotes = noteService.getAllArchivedNotes(token);
@@ -181,8 +194,9 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new Response("Archived notes are", Util.OK_RESPONSE_CODE, archivedNotes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+//		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//				.body(new Response(Util.NO_NOTES_FOUND_MESSAGE, Util.NOT_FOUND_RESPONSE_CODE));
+		throw new NoteNotFoundException("Opps...Archived Notes Not Found!", 404);
 	}
 
 	@ApiOperation(value = "change color of a note for valid user")
@@ -194,6 +208,7 @@ public class NoteController {
 			@RequestParam("color") String noteColour) {
 		noteService.changeColour(token, noteId, noteColour);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed", Util.OK_RESPONSE_CODE));
+		
 	}
 
 	@ApiOperation(value = "set remainder for a note of valid user")

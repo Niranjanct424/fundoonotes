@@ -9,18 +9,37 @@ import com.bridgelabz.fundoonotes.response.Response;
 
 @RestControllerAdvice
 public class GlobalResponseExceptionHandler {
-	
+
 	@ExceptionHandler({ UserException.class, RemainderException.class, EmailSentFailedException.class })
 	public ResponseEntity<Response> handleAllUserException(Exception exception) {
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response(exception.getMessage(), 502));
 	}
 	
+
 	@ExceptionHandler(NoteException.class)
 	public ResponseEntity<Response> handleAllNoteException(NoteException exception) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
 				.body(new Response(exception.getMessage(), exception.getStatus()));
 	}
 	
+	@ExceptionHandler(LabelAlreadyExistException.class)
+	public ResponseEntity<Response> LabelAlreadyExistException(LabelAlreadyExistException exception) {
+		return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
+				.body(new Response(exception.getMessage(), exception.getStatus()));
+	}
+	
+	@ExceptionHandler(LabelNotFoundException.class)
+	public ResponseEntity<Response> LabelNotFoundException(LabelNotFoundException exception) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new Response(exception.getMessage(), exception.getStatus()));
+	}
+
+	@ExceptionHandler(NoteNotFoundException.class)
+	public ResponseEntity<Response> handleAllNoteException(NoteNotFoundException exception) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new Response(exception.getMessage(), exception.getStatus()));
+	}
+
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<Response> handleAllNoteException(AuthorizationException authorizationException) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -33,18 +52,17 @@ public class GlobalResponseExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response(invalidCredentialsException.getMessage(), invalidCredentialsException.getStatus()));
 	}
-	
+
 	@ExceptionHandler(LabelException.class)
 	public ResponseEntity<Response> handleAllLabelException(LabelException labelException) {
 		return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
 				.body(new Response(labelException.getMessage(), labelException.getStatus()));
 	}
-	
+
 	@ExceptionHandler(ColaboratorException.class)
 	public ResponseEntity<Response> handleAllColaboratorException(ColaboratorException exception) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body(new Response(exception.getMessage(), exception.getStatus()));
 	}
-	
 
 }
