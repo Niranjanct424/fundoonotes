@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -56,6 +58,11 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Label> labels;
 
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "colaborator_note", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "note_id") })
+	private List<Note> colaboratedNotes;
 	
 	public User(long id, String name, String password, String mobileNumber, String emailId) {
 		super();

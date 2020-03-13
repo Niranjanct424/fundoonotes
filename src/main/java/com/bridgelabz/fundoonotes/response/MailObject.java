@@ -2,13 +2,15 @@ package com.bridgelabz.fundoonotes.response;
 
 import java.io.Serializable;
 
+import lombok.Data;
+
 /**
  * 
  * @author Niranjan c.t
  * @version 1.0
  * @Date : 29-02-2019
  */
-
+@Data
 public class MailObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,31 +27,8 @@ public class MailObject implements Serializable {
 		this.message = message;
 	}
 
-	public MailObject() {
-	}
+	
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSubject() {
-		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 }

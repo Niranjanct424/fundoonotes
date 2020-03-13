@@ -40,14 +40,13 @@ public class UserController {
 	@Autowired
 	private JWTToken jwtToken;
 
-
+	@SuppressWarnings("unchecked")
 	@PostMapping("User/Registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto newUserDTO) {
 		boolean resultStatus = userService.register(newUserDTO);
 		if (!resultStatus) {
-			throw new UserException("User already Registered", 208);
-			// return (ResponseEntity<Response>)
-			// ResponseEntity.status(HttpStatus.ALREADY_REPORTED);
+			// throw new UserException("User already Registered", 208);
+			return (ResponseEntity<Response>) ResponseEntity.status(HttpStatus.ALREADY_REPORTED);
 		}
 		// throw new UserException("Registertration done successfully", 200);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("registration successful", 200));
@@ -58,9 +57,8 @@ public class UserController {
 		if (userService.isVerifiedUserToken(token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Verification successful"));
 		}
-		throw new UserException("Verification failed", 502);
-		// return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new
-		// Response("Verification Failed"));
+		// throw new UserException("Verification failed", 502);
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response("Verification Failed"));
 
 	}
 
@@ -73,9 +71,8 @@ public class UserController {
 			System.out.println("Token : " + newToken);
 			return ResponseEntity.status(HttpStatus.OK).header(newToken).body(new Response("Login Successful ", 200));
 		}
-		throw new EmailSentFailedException("check mail for verification");
-		// return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("check
-		// mail for verification"));
+		// throw new EmailSentFailedException("check mail for verification");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("check mail for verification"));
 
 	}
 
@@ -85,9 +82,9 @@ public class UserController {
 		if (userEmail) {
 			return ResponseEntity.status(HttpStatus.FOUND).body(new Response(" user Exist "));
 		}
-		throw new RemainderException("Unauthorized user check mail for verification", 401);
-		// return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new
-		// Response("Unauthorized user"));
+		// throw new RemainderException("Unauthorized user check mail for verification",
+		// 401);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("Unauthorized user"));
 	}
 
 	@PutMapping("User/UpdatePassword/{token}")
@@ -97,9 +94,8 @@ public class UserController {
 		if (updationStatus) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Password updated sucessfully"));
 		}
-		throw new RemainderException("failed to update the password", 400);
-		// return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
-		// Response("failed to update the password"));
+//		throw new RemainderException("failed to update the password", 400);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("failed to update the password"));
 
 	}
 

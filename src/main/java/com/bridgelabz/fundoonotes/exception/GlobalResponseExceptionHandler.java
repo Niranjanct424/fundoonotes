@@ -22,6 +22,13 @@ public class GlobalResponseExceptionHandler {
 				.body(new Response(exception.getMessage(), exception.getStatus()));
 	}
 	
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<Response> UserNotFoundException(UserNotFoundException exception) {
+		return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
+				.body(new Response(exception.getMessage()));
+	}
+	
 	@ExceptionHandler(LabelAlreadyExistException.class)
 	public ResponseEntity<Response> LabelAlreadyExistException(LabelAlreadyExistException exception) {
 		return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
@@ -52,6 +59,15 @@ public class GlobalResponseExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response(invalidCredentialsException.getMessage(), invalidCredentialsException.getStatus()));
 	}
+	
+	@ExceptionHandler(PasswordMissMatchException.class)
+	public ResponseEntity<Response> PasswordMissMatchException(
+			PasswordMissMatchException invalidCredentialsException) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response(invalidCredentialsException.getMessage()));
+	}
+	
+	
 
 	@ExceptionHandler(LabelException.class)
 	public ResponseEntity<Response> handleAllLabelException(LabelException labelException) {

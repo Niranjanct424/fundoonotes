@@ -5,14 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.exception.AuthorizationException;
 import com.bridgelabz.fundoonotes.exception.RemainderException;
-import com.bridgelabz.fundoonotes.exception.UserException;
+import com.bridgelabz.fundoonotes.exception.UserNotFoundException;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.NoteRepository;
@@ -42,7 +41,7 @@ public class NoteServiceImplementation implements INoteService {
 		if (fetchedNote != null) {
 			return fetchedNote;
 		}
-		throw new UsernameNotFoundException("Note Not Found");
+		throw new UserNotFoundException("Note Not Found");
 	}
 
 	@Override
@@ -226,7 +225,7 @@ public class NoteServiceImplementation implements INoteService {
 		authenticatedUser(token);
 		System.out.println("We got the autheicated user");
 		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
-		System.out.println("fetchedNote we get is  "+fetchedNote);
+		System.out.println("fetchedNote we get is  " + fetchedNote);
 		if (!fetchedNote.isEmpty()) {
 			System.out.println("returning fetched note");
 			return fetchedNote;

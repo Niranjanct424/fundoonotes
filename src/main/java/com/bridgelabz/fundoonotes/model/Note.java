@@ -57,6 +57,11 @@ public class Note {
 			@JoinColumn(name = "label_id") })
 	@JsonIgnore
 	private List<Label> labelsList;
+	
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "colaboratedNotes")
+	private List<User> colaboratedUsers;
 	/**
 	 * @Description : Getters and setters Implementation
 	 * @return
