@@ -56,31 +56,31 @@ public class UserServiceImplemenation implements UserService {
 	@Override
 	public boolean register(RegisterDto userDto) {
 		User fetchedUser = userRepository.getUser(userDto.getEmailId());
-		if (fetchedUser != null) {
-			System.out.println("user already exist");
-			return false;
-		}
-		User newUser = new User();
-		BeanUtils.copyProperties(userDto, newUser);
-		newUser.setCreateDateTime(LocalDateTime.now());
-		newUser.setUpdateDateTime(LocalDateTime.now());
-		newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-		newUser.setVerified(false);
-		userRepository.save(newUser);
-		// user again fetched from database and mail sent for verification
-		User fetchedUserForVerification = userRepository.getUser(newUser.getEmailId());
-		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
-				jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
+		if (fetchedUser == null) {
+			
+			User newUser = new User();
+			BeanUtils.copyProperties(userDto, newUser);
+			newUser.setCreateDateTime(LocalDateTime.now());
+			newUser.setUpdateDateTime(LocalDateTime.now());
+			newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+			newUser.setVerified(false);
+			userRepository.save(newUser);
+			// user again fetched from database and mail sent for verification
+			User fetchedUserForVerification = userRepository.getUser(newUser.getEmailId());
+			String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
+					jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
 
-//		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
-//			return true;
-		mailObject.setEmail(userDto.getEmailId());
-		mailObject.setSubject("RabitMQ mail verification");
-		mailObject.setMessage(emailBodyContaintLink);
-		rabbitMQSender.send(mailObject);
-		return true;
-		
-//			throw new EmailSentFailedException("Opps...Error sending verification mail!");
+//			if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
+//				return true;
+			mailObject.setEmail(userDto.getEmailId());
+			mailObject.setSubject("RabitMQ mail verification");
+			mailObject.setMessage(emailBodyContaintLink);
+			rabbitMQSender.send(mailObject);
+			return true;
+			
+		}
+		throw new EmailSentFailedException("Opps...Error sending verification mail!");
+
 
 	}
 
