@@ -20,8 +20,10 @@ import com.bridgelabz.fundoonotes.exception.UserException;
 import com.bridgelabz.fundoonotes.exception.UserNotFoundException;
 import com.bridgelabz.fundoonotes.model.User;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
+import com.bridgelabz.fundoonotes.response.MailObject;
 import com.bridgelabz.fundoonotes.utility.EmailService;
 import com.bridgelabz.fundoonotes.utility.JWTToken;
+import com.bridgelabz.fundoonotes.utility.RabbitMQSender;
 import com.bridgelabz.fundoonotes.utility.Util;
 
 @Service
@@ -43,11 +45,19 @@ public class UserServiceImplemenation implements UserService {
 
 	@Autowired
 	EmailService emilService;
+	
+	@Autowired
+	MailObject mailObject;
+	
+	@Autowired
+	RabbitMQSender rabbitMQSender;
+	
 
 	@Override
 	public boolean register(RegisterDto userDto) {
 		User fetchedUser = userRepository.getUser(userDto.getEmailId());
 		if (fetchedUser != null) {
+			System.out.println("user already exist");
 			return false;
 		}
 		User newUser = new User();
@@ -62,10 +72,15 @@ public class UserServiceImplemenation implements UserService {
 		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
 				jwtToken.createJwtToken(fetchedUserForVerification.getUserId()));
 
-		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
-			return true;
-		else
-			throw new EmailSentFailedException("Opps...Error sending verification mail!");
+//		if (emilService.sendMail(userDto.getEmailId(), "Verification", emailBodyContaintLink))
+//			return true;
+		mailObject.setEmail(userDto.getEmailId());
+		mailObject.setSubject("RabitMQ mail verification");
+		mailObject.setMessage(emailBodyContaintLink);
+		rabbitMQSender.send(mailObject);
+		return true;
+		
+//			throw new EmailSentFailedException("Opps...Error sending verification mail!");
 
 	}
 

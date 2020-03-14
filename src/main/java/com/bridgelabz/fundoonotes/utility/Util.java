@@ -1,6 +1,9 @@
 package com.bridgelabz.fundoonotes.utility;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpStatus;
+
+import com.bridgelabz.fundoonotes.response.MailObject;
 
 /**
  * @author Niranjan c.t
@@ -21,7 +24,7 @@ public class Util {
 	public static final int USER_AUTHENTICATION_EXCEPTION_STATUS = 401;
 	public static final int NOT_FOUND_RESPONSE_CODE = 404;	
 	public static final String NO_NOTES_FOUND_MESSAGE = "Opps...No notes Found!";
-	public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
+	public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link from RabbitMq";
 	public static final String IP_ADDRESS = "http://localhost:";
 	public static final String REGESTATION_VERIFICATION_LINK = "/user/verification";
 	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "User not found!";
@@ -51,5 +54,7 @@ public class Util {
 
 		return url + "/" + token;
 	}
+	
+
 
 }

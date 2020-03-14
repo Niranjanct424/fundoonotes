@@ -15,6 +15,7 @@ import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.EmailService;
 import com.bridgelabz.fundoonotes.utility.JWTToken;
+import com.bridgelabz.fundoonotes.utility.RabbitMQSender;
 import com.bridgelabz.fundoonotes.utility.Util;
 
 @Service
@@ -28,8 +29,12 @@ public class ColaboratorServiceImpl implements IColaboratorService {
 
 	@Autowired
 	NoteRepository noteRepository;
+	
 	@Autowired
 	EmailService emilService;
+	
+	@Autowired
+	RabbitMQSender rabbitMQSender;
 
 	public User authenticateUser(String token) {
 		User fetcheduser = userRepository.getUser(jwtToken.decodeToken(token));

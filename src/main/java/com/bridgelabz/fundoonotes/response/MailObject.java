@@ -2,6 +2,8 @@ package com.bridgelabz.fundoonotes.response;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 
 /**
@@ -11,7 +13,13 @@ import lombok.Data;
  * @Date : 29-02-2019
  */
 @Data
+@Component
 public class MailObject implements Serializable {
+
+	public MailObject() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	private static final long serialVersionUID = 1L;
 

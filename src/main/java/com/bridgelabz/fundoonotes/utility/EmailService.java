@@ -13,7 +13,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+
+import com.bridgelabz.fundoonotes.exception.EmailSentFailedException;
+import com.bridgelabz.fundoonotes.response.MailObject;
 
 @Component
 public class EmailService {
@@ -90,6 +94,15 @@ public class EmailService {
 		properties.put("mail.smtp.auth", "true"); // enable authentication
 		properties.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
 		return properties;
+	}
+	
+	@RabbitListener(queues = "rmq.rube.queue")
+	public void recievedMessage(MailObject mailObject) {
+
+		if (sendMail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage())) {
+			return;
+		}
+		throw new EmailSentFailedException("Opps...Error Sending mail!");
 	}
 
 }
