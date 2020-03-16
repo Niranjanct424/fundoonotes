@@ -6,11 +6,11 @@ import com.bridgelabz.fundoonotes.model.Note;
 
 public interface IElasticSearch {
 	
-	public void createNote(Note noteInfo);
+	public String createNote(Note noteInfo);
 	
-	public void updateNote(Note noteInfo);
+	public String updateNote(Note noteInfo);
 	
-	public void deleteNote(Note noteInfo);
+	public String deleteNote(Note noteInfo);
 	
 	List<Note> searchByTitle(String title);
 

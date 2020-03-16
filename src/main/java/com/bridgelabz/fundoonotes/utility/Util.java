@@ -1,9 +1,6 @@
 package com.bridgelabz.fundoonotes.utility;
 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpStatus;
-
-import com.bridgelabz.fundoonotes.response.MailObject;
 
 /**
  * @author Niranjan c.t

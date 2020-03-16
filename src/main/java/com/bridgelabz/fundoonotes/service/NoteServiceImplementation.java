@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoonotes.dto.NoteDto;
 import com.bridgelabz.fundoonotes.dto.RemainderDto;
 import com.bridgelabz.fundoonotes.exception.AuthorizationException;
+import com.bridgelabz.fundoonotes.exception.NoteException;
 import com.bridgelabz.fundoonotes.exception.RemainderException;
 import com.bridgelabz.fundoonotes.exception.UserNotFoundException;
 import com.bridgelabz.fundoonotes.model.Note;
@@ -27,9 +28,11 @@ public class NoteServiceImplementation implements INoteService {
 	private NoteRepository noteRepository;
 	@Autowired
 	private JWTToken jwtToken;
+	@Autowired
+	ElasticSearchImpl elasticSearchImpl;
 
 	private User authenticatedUser(String token) {
-		com.bridgelabz.fundoonotes.model.User fetchedUser = userRepository.getUser(jwtToken.decodeToken(token));
+		User fetchedUser = userRepository.getUser(jwtToken.decodeToken(token));
 		if (fetchedUser != null) {
 			return fetchedUser;
 		}
@@ -56,6 +59,11 @@ public class NoteServiceImplementation implements INoteService {
 			newNote.setColor("white");
 			fetchedUser.getNotes().add(newNote);
 			noteRepository.saveOrUpdate(newNote);
+			try {
+				elasticSearchImpl.createNote(newNote);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		throw new AuthorizationException("Authorization faild", 401);
@@ -75,6 +83,12 @@ public class NoteServiceImplementation implements INoteService {
 		System.out.println("user detials updated ");
 		noteRepository.saveOrUpdate(fetchedNote);
 		System.out.println("user Note updatation successful ");
+		try {
+			elasticSearchImpl.updateNote(fetchedNote);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new NoteException("Faild to create note", 502);
+		}
 		return true;
 	}
 
@@ -84,10 +98,16 @@ public class NoteServiceImplementation implements INoteService {
 	 */
 	@Override
 	public boolean deleteNote(long noteId, String token) {
-		authenticatedUser(token);
-		verifiedNote(noteId);
-		noteRepository.isDeletedNote(noteId);
-		return true;
+		User fetchedUser = authenticatedUser(token);
+
+		if (fetchedUser != null) {
+			// authenticatedUser(token);
+			verifiedNote(noteId);
+			noteRepository.isDeletedNote(noteId);
+			return true;
+		}
+
+		throw new NoteException("Faild to Update note", 502);
 	}
 
 	/**
@@ -105,7 +125,7 @@ public class NoteServiceImplementation implements INoteService {
 			noteRepository.saveOrUpdate(fetchedNote);
 			return true;
 		}
-		return false;
+		throw new NoteException("Faild to archiveNote", 404);
 	}
 
 	/**
@@ -144,7 +164,7 @@ public class NoteServiceImplementation implements INoteService {
 			noteRepository.saveOrUpdate(fetchedNote);
 			return true;
 		}
-		return false;
+		throw new NoteException("Note not found to make it trash", 404);
 	}
 
 	@Override
@@ -160,7 +180,7 @@ public class NoteServiceImplementation implements INoteService {
 		if (!trashedNotes.isEmpty()) {
 			return trashedNotes;
 		}
-		return trashedNotes;
+		throw new NoteException("TrashedNotes not found", 404);
 	}
 
 	@Override
@@ -169,7 +189,7 @@ public class NoteServiceImplementation implements INoteService {
 		if (!pinnedNotes.isEmpty()) {
 			return pinnedNotes;
 		}
-		return null;
+		throw new NoteException("PinnedNotes not found", 404);
 	}
 
 	@Override
@@ -178,16 +198,21 @@ public class NoteServiceImplementation implements INoteService {
 		if (!archivedNotes.isEmpty()) {
 			return archivedNotes;
 		}
-		return archivedNotes;
+		throw new NoteException("ArchivedNotes not found", 404);
 	}
 
 	@Override
 	public void changeColour(String token, long noteId, String noteColor) {
 		authenticatedUser(token);
 		Note fetchedNote = verifiedNote(noteId);
-		fetchedNote.setColor(noteColor);
-		fetchedNote.setUpdatedDate(LocalDateTime.now());
-		noteRepository.saveOrUpdate(fetchedNote);
+		if(fetchedNote != null)
+		{
+			fetchedNote.setColor(noteColor);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			noteRepository.saveOrUpdate(fetchedNote);
+		}
+		throw new NoteException("Faild to change color of Note ", 404);
+
 	}
 
 	@Override
@@ -221,17 +246,25 @@ public class NoteServiceImplementation implements INoteService {
 
 	@Override
 	public List<Note> searchByTitle(String token, String noteTitle) {
-		System.out.println("inside searchByTittle method ");
-		authenticatedUser(token);
-		System.out.println("We got the autheicated user");
-		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
-		System.out.println("fetchedNote we get is  " + fetchedNote);
-		if (!fetchedNote.isEmpty()) {
-			System.out.println("returning fetched note");
-			return fetchedNote;
+//		System.out.println("inside searchByTittle method ");
+//		authenticatedUser(token);
+//		System.out.println("We got the autheicated user");
+//		List<Note> fetchedNote = noteRepository.searchBy(noteTitle);
+//		System.out.println("fetchedNote we get is  " + fetchedNote);
+//		if (!fetchedNote.isEmpty()) {
+//			System.out.println("returning fetched note");
 
+		try {
+			List<Note> fetchedNote = elasticSearchImpl.searchByTitle(noteTitle);
+			return fetchedNote;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		throw new com.bridgelabz.fundoonotes.exception.NoteException("Note Not Found Exception", 502);
+
+//		}
+		// throw new com.bridgelabz.fundoonotes.exception.NoteException("Note Not Found
+		// Exception", 502);
 
 	}
 

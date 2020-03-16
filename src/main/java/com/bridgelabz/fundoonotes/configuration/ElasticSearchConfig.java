@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ElasticSearchConfig {
+	/**
+	 * RestHighLevelClient client that wraps an instance of the low level RestClient
+	 *  and allows to build requests and read responses.
+	 * 
+	 */
 	
 	@Bean(destroyMethod = "close") 
 	public RestHighLevelClient client()
