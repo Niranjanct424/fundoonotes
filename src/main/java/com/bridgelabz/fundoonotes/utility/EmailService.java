@@ -96,13 +96,13 @@ public class EmailService {
 		return properties;
 	}
 	
-	@RabbitListener(queues = "rmq.rube.queue")
-	public void recievedMessage(MailObject mailObject) {
-
-		if (sendMail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage())) {
-			return;
-		}
-		throw new EmailSentFailedException("Opps...Error Sending mail!");
-	}
+//	@RabbitListener(queues = "rmq.rube.queue")
+//	public void recievedMessage(MailObject mailObject) {
+//
+//		if (sendMail(mailObject.getEmail(), mailObject.getSubject(), mailObject.getMessage())) {
+//			return;
+//		}
+//		throw new EmailSentFailedException("Opps...Error Sending mail!");
+//	}
 
 }

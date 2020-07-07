@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.dto;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import lombok.Data;
@@ -17,6 +19,8 @@ public class NoteDto {
 	private String title;
 	
 	private String description;
+	
+	private LocalDateTime reminderDate;
 
 
 

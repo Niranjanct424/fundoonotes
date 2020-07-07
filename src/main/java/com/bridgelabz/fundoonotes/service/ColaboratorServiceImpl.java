@@ -15,7 +15,6 @@ import com.bridgelabz.fundoonotes.repository.NoteRepository;
 import com.bridgelabz.fundoonotes.repository.UserRepository;
 import com.bridgelabz.fundoonotes.utility.EmailService;
 import com.bridgelabz.fundoonotes.utility.JWTToken;
-import com.bridgelabz.fundoonotes.utility.RabbitMQSender;
 import com.bridgelabz.fundoonotes.utility.Util;
 
 @Service
@@ -33,8 +32,8 @@ public class ColaboratorServiceImpl implements IColaboratorService {
 	@Autowired
 	EmailService emilService;
 	
-	@Autowired
-	RabbitMQSender rabbitMQSender;
+//	@Autowired
+//	RabbitMQSender rabbitMQSender;
 
 	public User authenticateUser(String token) {
 		User fetcheduser = userRepository.getUser(jwtToken.decodeToken(token));
@@ -65,7 +64,7 @@ public class ColaboratorServiceImpl implements IColaboratorService {
 	}
 
 	@Override
-	public boolean addColaborator(String token, long noteId, String emailId) {
+	public Note addColaborator(String token, long noteId, String emailId) {
 		if (authenticateUser(token).getEmailId().equals(emailId)) {
 			throw new ColaboratorException("Opps...Can't add own account as colaborator", 400);
 		}
@@ -74,15 +73,18 @@ public class ColaboratorServiceImpl implements IColaboratorService {
 		fetchedValidNote.getColaboratedUsers().add(fetchedValidColaborator);
 		fetchedValidColaborator.getColaboratedNotes().add(fetchedValidNote);
 		userRepository.save(fetchedValidColaborator);
+		return fetchedValidNote;
 		
-		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
-				jwtToken.createJwtToken(fetchedValidColaborator.getUserId()));
+		
+//		String emailBodyContaintLink = Util.createLink("http://localhost:8080/User/Verification",
+//				jwtToken.createJwtToken(fetchedValidColaborator.getUserId()));
+		
 
-		if (emilService.sendMail(fetchedValidColaborator.getEmailId(), "Note colaboration", emailBodyContaintLink))
-			return true;
-			
-		else
-			throw new EmailSentFailedException("Opps...Error sending  mail! to colaborator");
+//		if (emilService.sendMail(fetchedValidColaborator.getEmailId(), "Note colaboration", emailBodyContaintLink))
+//			return true;
+//			
+//		else
+//			throw new EmailSentFailedException("Opps...Error sending  mail! to colaborator");
 		
 	}
 
@@ -94,14 +96,14 @@ public class ColaboratorServiceImpl implements IColaboratorService {
 
 	
 	@Override
-	public boolean removeColaborator(String token, Long noteId, String emailId) {
+	public Note removeColaborator(String token, Long noteId, String emailId) {
 		authenticateUser(token);
 		Note fetchedValidNote = verifyNote(noteId);
 		User fetchedValidColaborator = validColaborator(emailId);
 		fetchedValidNote.getColaboratedUsers().remove(fetchedValidColaborator);
 		fetchedValidColaborator.getColaboratedNotes().remove(fetchedValidNote);
 		userRepository.save(fetchedValidColaborator);
-		return true;
+		return fetchedValidNote;
 	}
 
 }

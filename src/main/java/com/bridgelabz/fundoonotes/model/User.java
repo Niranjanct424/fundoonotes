@@ -17,6 +17,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -58,11 +59,28 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Label> labels;
 
+	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "colaborator_note", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "note_id") })
 	private List<Note> colaboratedNotes;
+	
+	
+	
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "user_id")
+//	private List<Note> notes;
+//	
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "collaborator_note" , joinColumns = { @JoinColumn (name = "user_id")} , inverseJoinColumns = {@JoinColumn(name = "note_id")})
+//	@JsonManagedReference
+//	@JsonIgnore
+//	private List<Note> collaboratorNotes;
+	
+	
+	
+	
 	
 	public User(long id, String name, String password, String mobileNumber, String emailId) {
 		super();
@@ -75,6 +93,8 @@ public class User {
 
 	public User() {
 	}
+	
+	
 
 
 }

@@ -6,15 +6,20 @@ import org.springframework.http.HttpStatus;
 
 import com.bridgelabz.fundoonotes.dto.LoginDto;
 
+import lombok.Data;
+
+@Data
 public class Response {
 
 	private String message;
+	private Object object;
+	private String token;
+	
 	private int statusCode;
 	private HttpStatus httpStatus;
-	@SuppressWarnings("unused")
 	private LoginDto dto;
 
-	private Object object;
+	
 
 	List<String> details;
 
@@ -30,6 +35,12 @@ public class Response {
 		this.statusCode = statusCode;
 		this.object = object;
 	}
+	public Response(String message, Object object) {
+		super();
+		this.message = message;
+		this.object = object;
+	}
+
 
 	public Response(String message) {
 		this.message = message;
@@ -45,6 +56,11 @@ public class Response {
 	public Response(String message, HttpStatus statusCode) {
 		this.message = message;
 		httpStatus = statusCode;
+
+	}
+	public Response(String message , String token) {
+		this.message = message;
+		this.token = token;
 
 	}
 

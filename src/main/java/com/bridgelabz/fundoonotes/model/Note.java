@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -51,11 +52,18 @@ public class Note {
 	private LocalDateTime updatedDate;
 	
 	private LocalDateTime reminderDate;
+//	private String reminderDate;
 
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "note_id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "label_id") })
+//	@JsonIgnore
+	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "note_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "label_id") })
+	@JoinTable(name = "note_label" ,joinColumns = { @JoinColumn(name = "note_id")} , inverseJoinColumns = {@JoinColumn(name = "label_id")})
+	@JsonBackReference
 	@JsonIgnore
+//	private List<Label> labels;
 	private List<Label> labelsList;
 	
 	
@@ -67,5 +75,18 @@ public class Note {
 	 * @return
 	 */
 
+	
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "note_label" ,joinColumns = { @JoinColumn(name = "note_id")} , inverseJoinColumns = {@JoinColumn(name = "label_id")})
+//	@JsonBackReference
+//	@JsonIgnore
+//	private List<Label> labels;
+//	
+//	
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "collaborator_note" , joinColumns = { @JoinColumn (name = "note_id")} , inverseJoinColumns = {@JoinColumn(name = "user_id")})
+//	@JsonBackReference
+//	private List<User> collaborators;
 
+	
 }

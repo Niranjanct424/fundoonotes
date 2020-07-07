@@ -8,7 +8,7 @@ import com.bridgelabz.fundoonotes.model.Note;
 
 public interface ILabelServices {
 
-	public void createLabel(String token, LabelDto labelDto);
+	public Label createLabel(String token, LabelDto labelDto);
 
 	public boolean createLabelAndMap(String token, long noteId, LabelDto labelDto);
 
@@ -23,5 +23,7 @@ public interface ILabelServices {
 	public List<Label> listOfLabels(String token);
 
 	public List<Note> listOfNotesOfLabel(String token, long labelId);
+
+	boolean idDeletedLabel(String token, long labelId);
 
 }

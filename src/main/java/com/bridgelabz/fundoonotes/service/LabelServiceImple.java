@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoonotes.dto.LabelDto;
 import com.bridgelabz.fundoonotes.exception.AuthorizationException;
 import com.bridgelabz.fundoonotes.exception.LabelAlreadyExistException;
+import com.bridgelabz.fundoonotes.exception.LabelException;
 import com.bridgelabz.fundoonotes.exception.LabelNotFoundException;
 import com.bridgelabz.fundoonotes.exception.NoteException;
 import com.bridgelabz.fundoonotes.model.Label;
@@ -56,7 +57,7 @@ public class LabelServiceImple implements ILabelServices {
 
 	@SuppressWarnings("null")
 	@Override
-	public void createLabel(String token, LabelDto labelDto) {
+	public Label createLabel(String token, LabelDto labelDto) {
 		User fetchedUser = userAuthentication(token);
 		Label fetchedLabel = labelRepository.findOneBylabelName(labelDto.getLabelName());
 		if (fetchedLabel == null) {
@@ -65,7 +66,7 @@ public class LabelServiceImple implements ILabelServices {
 			newLabel.setCreatedDate(LocalDateTime.now());
 			fetchedUser.getLabels().add(newLabel);
 			labelRepository.save(newLabel);
-			return;
+			return newLabel;
 		}
 		throw new LabelAlreadyExistException("Label Alreay exist in the database",208);
 	}
@@ -132,15 +133,56 @@ public class LabelServiceImple implements ILabelServices {
 	}
 
 	@Override
-	public boolean deleteLabel(String token, long labelId) {
+	public boolean idDeletedLabel(String token, long labelId) {
 		userAuthentication(token);
 		Optional<Label> fetchedLabel = labelRepository.findById(labelId);
 		if (fetchedLabel.isPresent()) {
 			labelRepository.delete(fetchedLabel.get());
 			return true;
 		}
-		throw new LabelNotFoundException("Label Not present in the database",404);
+		throw new LabelException("Label not found to delete ",404);
 	}
+	
+	
+	@Override
+	public boolean deleteLabel(String token, long labelId) {
+
+		userAuthentication(token);
+		System.out.println("inside is delete label method");
+		Optional<Label> fetchedLabel = labelRepository.findById(labelId);
+		System.out.println("label found");
+		if (fetchedLabel.isPresent()) {
+			labelRepository.delete(fetchedLabel.get());
+			System.out.println("label deleted");
+			return true;
+		}
+		throw new LabelException("Label not found to delete ",404);
+	}
+	
+	
+//	@Override
+//	public boolean isLabelEdited(String token, String labelName, long labelId) {
+//		authenticatedUser(token);
+//		Optional<Label> fetchedLabel = labelRepository.findById(labelId);
+//		if (fetchedLabel.isPresent()) {
+//			if (isValidNameForEdit(fetchedLabel, labelName)) {
+//				labelRepository.updateLabelName(labelName, fetchedLabel.get().getLabelId());
+//				return true;
+//			}
+//			return false;
+//		}
+//		throw new LabelException(Util.LABEL_NOT_FOUND_EXCEPTION_MESSAGE, 404);
+//	}
+//
+//	private boolean isValidNameForEdit(Optional<Label> fetchedLabel, String labelName) {
+//
+//		if (labelRepository.checkLabelWithDb(labelName).isEmpty()) {
+//			return !fetchedLabel.get().getLabelName().equals(labelName);
+//		}
+//		throw new LabelException(Util.LABEL_ALREADY_EXIST_EXCEPTION_MESSAGE, Util.ALREADY_EXIST_EXCEPTION_STATUS);
+//	}
+	
+	
 
 	@Override
 	public List<Label> listOfLabels(String token) {

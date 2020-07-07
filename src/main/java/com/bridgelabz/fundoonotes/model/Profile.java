@@ -33,7 +33,6 @@ public class Profile {
 		this.profilePicName = profilePicName;
 		this.userLabel = userLabel;
 	}
-
 	
 	
 	

@@ -73,4 +73,10 @@ public interface INoteRepository {
 	 * @return List<Note>
 	 */
 	public List<Note> searchBy(String noteTitle);
+
+	List<Note> getNotes(long userId);
+
+	Note fetchById(long id);
+
+	List<Note> getAllRemainderNotes(long userId);
 }

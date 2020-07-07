@@ -15,19 +15,19 @@ public class UpdatePassword {
 	 */
 	
 	
-		private String emailId;
+//		private String emailId;
 		private String password;
 		private String confirmPassword;
 
 		
-		public String getEmailId() {
-			return emailId;
-		}
-
-		
-		public void setEmailId(String emailId) {
-			this.emailId = emailId;
-		}
+//		public String getEmailId() {
+//			return emailId;
+//		}
+//
+//		
+//		public void setEmailId(String emailId) {
+//			this.emailId = emailId;
+//		}
 
 		/**
 		 * Getter method to fetch password
@@ -55,7 +55,7 @@ public class UpdatePassword {
 
 		@Override
 		public String toString() {
-			return "UpdatePassword [emailId=" + emailId + ", password=" + password + ", confirmPassword=" + confirmPassword
+			return "UpdatePassword [password=" + password + ", confirmPassword=" + confirmPassword
 					+ "]";
 		}
 

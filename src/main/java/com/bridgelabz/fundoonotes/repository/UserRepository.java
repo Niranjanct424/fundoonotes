@@ -78,6 +78,7 @@ public class UserRepository implements IUserRepository {
 	@Transactional
 	public boolean updatePassword(UpdatePassword updatePasswordinformation, long id) {
 		Session session = entityManager.unwrap(Session.class);
+		System.out.println("inside database method");
 		Query query = session.createQuery("UPDATE User set password=:updatedPassword" + " WHERE id=:id");
 		query.setParameter("updatedPassword", updatePasswordinformation.getConfirmPassword());
 		query.setParameter("id", id);

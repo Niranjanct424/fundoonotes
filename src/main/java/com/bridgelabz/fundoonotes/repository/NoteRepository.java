@@ -48,6 +48,16 @@ public class NoteRepository implements INoteRepository {
 		return (Note) query.uniqueResult();
 
 	}
+	@Override
+	@Transactional
+	public Note fetchById(long id)
+	{
+		Session session = entityManager.unwrap(Session.class);
+		Query<?> query = session.createQuery("from NoteEntity where note_id=:id");
+		query.setParameter("id", id);
+		return (Note) query.uniqueResult();
+	}
+	
 
 	@SuppressWarnings({ "rawtypes"})
 	@Override
@@ -69,11 +79,24 @@ public class NoteRepository implements INoteRepository {
 	@Override
 	@Transactional
 	public List<Note> getAllNotes(long userId) {
+		System.out.println("inside note repository");
 		return entityManager.unwrap(Session.class)
 				.createQuery("FROM Note WHERE user_id=:id and is_trashed=false and is_archived=false")
 				.setParameter("id", userId).getResultList();
 
 	}
+	
+	@Override
+	@Transactional
+	public List<Note> getNotes(long userId) {
+
+		Session session = entityManager.unwrap(Session.class);
+		Query<Note> query = session.createQuery("from Note where user_id=:userId" , Note.class);
+		query.setParameter("userId", userId);
+		return query.getResultList();
+	
+	}                  
+
 
 	/**
 	 * @Description:using HQL customized query from current session and if the notes
@@ -110,6 +133,13 @@ public class NoteRepository implements INoteRepository {
 		return entityManager.unwrap(Session.class).createQuery("From Note Where title=:id and is_trashed=false")
 				.setParameter("id", noteTitle).getResultList();
 
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Note> getAllRemainderNotes(long userId) {
+		return entityManager.unwrap(Session.class)
+				.createQuery("FROM Note WHERE user_id=:id and remainder_time != null and is_trashed=false")
+				.setParameter("id", userId).getResultList();
 	}
 
 }

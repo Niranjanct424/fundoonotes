@@ -14,11 +14,45 @@ public class UserDetailResponse {
 	private String tokenCode;
 	private int statusCode;
 	private LoginDto loginInformation;
+	private String message;
+	private String token;
+	private String name;
 
 	public UserDetailResponse(String tokenCode, int statusCode, LoginDto loginInformation) {
 		this.tokenCode = tokenCode;
 		this.statusCode = statusCode;
 		this.loginInformation = loginInformation;
+	}
+	
+	public UserDetailResponse(String message, int statusCode, String token, String name) {
+		this.message = message;
+		this.statusCode = statusCode;
+		this.token = token;
+		this.name = name;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
